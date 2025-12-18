@@ -217,7 +217,7 @@ endif
 # override:                     defaults /usr/local/cuda,
 # override:                     validity is checked by looking for bin/nvcc under it,
 # override:                     /usr is always tried as a last resort
-CUDA_INSTALL_PATH ?= /usr/local/cuda
+CUDA_INSTALL_PATH=$(shell which nvcc | sed "s/\/bin\/nvcc//")
 
 # We check the validity of the path by looking for bin/nvcc under it.
 # if not found, we look into /usr, and finally abort
@@ -638,9 +638,10 @@ ifeq ($(arch), x86_64)
 		LIB_PATH_SFX = 64
 	endif
 else # i386 or i686
-	TARGET_ARCH ?= -m32
+	TARGET_ARCH ?=
 endif
 
+LIB_PATH_SFX = 64
 # override: INCPATH - paths for include files
 # override:           add entries in the form: -I/some/path
 INCPATH ?=
