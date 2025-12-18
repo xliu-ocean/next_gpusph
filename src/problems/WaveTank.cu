@@ -45,7 +45,7 @@ WaveTank::WaveTank(GlobalData *_gdata) : Problem(_gdata)
 	// Add objects to the tank
 	const bool use_cyl = get_option("cylinder", false);
 	// Density diffusion type
-	const DensityDiffusionType RHODIFF = get_option("density-diffusion", COLAGROSSI);
+	const DensityDiffusionType RHODIFF = get_option("density-diffusion", DELTA_SPH);
 
 	if (use_bottom_plane && !use_planes)
 		throw std::invalid_argument("cannot use bottom plane if not using planes");
