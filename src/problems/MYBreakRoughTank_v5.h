@@ -48,7 +48,7 @@ class MYBreakRoughTank_v5: public Problem {
 
 	public:
 		MYBreakRoughTank_v5(GlobalData *);
-		void copy_planes(PlaneList &);
+//		void copy_planes(PlaneList &);
 
 		void moving_bodies_callback(const uint, Object*, const double, const double, const float3&,
 									const float3&, const KinematicData &, KinematicData &,
