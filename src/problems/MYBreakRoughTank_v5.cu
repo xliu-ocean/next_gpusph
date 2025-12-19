@@ -47,6 +47,8 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	// Density diffusion type
 	const DensityDiffusionType RHODIFF = get_option("density-diffusion", FERRARI);
 
+	const bool use_geometries = get_option("use-geometries", true);
+
 	if (use_bottom_plane && !use_planes)
 		throw std::invalid_argument("cannot use bottom plane if not using planes");
 
@@ -74,8 +76,8 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 		viscosity<SPSVISC>,
 		boundary<DUMMY_BOUNDARY>
 	).select_options(
-		RHODIFF,
-		use_planes, add_flags<ENABLE_DEM|ENABLE_PLANES>()
+		RHODIFF,use_geometries,
+		add_flags<ENABLE_DEM|ENABLE_PLANES>()
 		//add_flags<ENABLE_DEM | ENABLE_PLANES>
 	);
 
@@ -156,7 +158,8 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	// Name of problem used for directory creation
 	//m_name = "MYBreakRoughTank_v5";
 
-	GeometryID dem = addDEM(dem_file);
+	//GeometryID dem = addDEM(dem_file);
+	addDEM(dem_file, DEM_FMT_ASCII, use_geometries ? FT_NOFILL : FT_BORDER);
 
 	// Building the geometry
 	const float br = (simparams()->boundarytype == MK_BOUNDARY ? m_deltap/MK_par : r0);
