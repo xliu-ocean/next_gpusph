@@ -158,7 +158,8 @@ WaveTank::WaveTank(GlobalData *_gdata) : Problem(_gdata)
 	// up to the at-rest height. This will be “carved out” by the wall and floor
 	// geometries placed afterwards
 
-	addBox(GT_FLUID, FT_SOLID, m_origin, lx, ly, H);
+	//addBox(GT_FLUID, FT_SOLID, m_origin, lx, ly, H);
+	addBox(GT_FLUID, FT_SOLID, Point(0,0,0), lx, ly, H);
 	cout << "\nadd box: " << m_origin.x<<" "<<lx<<" "<< ly<<" "<< lz << "\n";
 	// place the paddle
 	GeometryID paddle = addBox(GT_MOVING_BODY, FT_BORDER,
