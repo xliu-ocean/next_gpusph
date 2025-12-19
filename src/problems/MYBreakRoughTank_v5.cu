@@ -38,6 +38,18 @@
 
 MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 {
+	// use planes in general
+	const bool use_planes = get_option("use_planes", false);
+	// use a plane for the bottom
+	const bool use_bottom_plane = get_option("bottom-plane", use_planes);
+	// Add objects to the tank
+	const bool use_cyl = get_option("cylinder", false);
+	// Density diffusion type
+	const DensityDiffusionType RHODIFF = get_option("density-diffusion", FERRARI);
+
+	if (use_bottom_plane && !use_planes)
+		throw std::invalid_argument("cannot use bottom plane if not using planes");
+
 	// Size and origin of the simulation domain
 	lx = 82.5;
 	ly = 2.0;
@@ -54,49 +66,51 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	beta = 1.432*M_PI/180.0;
         beta_2 = 11.30993*M_PI/180.0; //b1/eta for run-up slope
 
-	// add obstacle
-	//const uint NUM_OBSTACLES = get_option("num_obstacles", 15);
-        //const bool ROTATE_OBSTACLE = get_option("rotate_obstacle", false);
-	//const double obstacle_side = 0.05;
-        //const double obstacle_xpos = 71.6;
 	// add DEM
 	const string dem_file = get_option("dem", "cobble_surface_with_slope.txt");
 
 
-	// Add objects to the tank
-	use_cyl = false;
-
 	SETUP_FRAMEWORK(
-	    //viscosity<ARTVISC>,
-		//viscosity<KINEMATICVISC>,
 		viscosity<SPSVISC>,
-		boundary<DUMMY_BOUNDARY>,
-		//boundary<MK_BOUNDARY>,
-		add_flags<ENABLE_DEM | ENABLE_PLANES>
+		boundary<DUMMY_BOUNDARY>
+	).select_options(
+		RHODIFF,
+		use_planes, add_flags<ENABLE_DEM|ENABLE_PLANES>()
+		//add_flags<ENABLE_DEM | ENABLE_PLANES>
 	);
 
-	m_size = make_double3(lx, ly, lz);
-	m_origin = make_double3(0, 0, 0);
-	if (use_cyl) {
-		m_origin.z -= 2.0*height;
-		m_size.z += 2.0*height;
-	}
+	// Allow user to set the MLS frequency at runtime. Default to 0 if density
+	// diffusion is enabled, 10 otherwise
+	const int mlsIters = get_option("mls",
+		(simparams()->densitydiffusiontype != DENSITY_DIFFUSION_NONE) ? 0 : 10);
 
-	addFilter(SHEPARD_FILTER, 20); // or MLS_FILTER
+	if (mlsIters > 0)
+		addFilter(MLS_FILTER, mlsIters);
+
+
+	//m_size = make_double3(lx, ly, lz);
+	//m_origin = make_double3(0, 0, 0);
+	//if (use_cyl) {
+	//	m_origin.z -= 2.0*height;
+	//	m_size.z += 2.0*height;
+	//}
+
+	//addFilter(SHEPARD_FILTER, 20); // or MLS_FILTER
 
 	if (get_option("testpoints", false)) {
 		addPostProcess(TESTPOINTS);
 	}
 
-	// use a plane for the bottom
-	use_bottom_plane = 1;  //1 for plane; 0 for particles
+	//// use a plane for the bottom
+	//use_bottom_plane = 1;  //1 for plane; 0 for particles
 
 	// SPH parameters
 	set_deltap(0.03f);  //0.005f;
-	set_timestep(0.0001);
+	//set_timestep(0.0001);
 	simparams()->dtadaptfactor = 0.2;
 	simparams()->buildneibsfreq = 10;
 	simparams()->tend = 20.0f; //seconds
+	//simparams()->densityDiffCoeff = 1.0;
 
 	//WaveGage
 	if (get_option("gages", false)) {
@@ -105,23 +119,23 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	}
 
 	// Physical parameters
-	//H = 0.45;
 	H = 2.3;
 	set_gravity(-9.81f);
-	setMaxFall(H);
+	//setMaxFall(H);
 
 	float r0 = m_deltap;
 
-	add_fluid( 1000.0f);
+	auto water = add_fluid( 1000.0f);
+	//add_fluid( 1000.0f);
 	set_equation_of_state(0, 7.0f, 50.f);
-	set_kinematic_visc(0, 1.0e-3);
+	set_kinematic_visc(0, 1.0e-6);
 	set_artificial_visc(0.2f);
 
 	//Wave paddle definition:  location, start & stop times, stroke and frequency (2 \pi/period)
-
 	//paddle_length = .7f;
 	paddle_length = 2.0f;
-	paddle_width = m_size.y - 2*r0;
+	//paddle_width = m_size.y - 2*r0;
+	paddle_width = ly -.2*r0;
 	//paddle_tstart=0.5f;
 	paddle_tstart=300.0f;
 	paddle_origin = make_double3(0.25f, r0, 0.0f);
@@ -140,7 +154,7 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	add_writer(VTKWRITER, .25);  //second argument is saving time in seconds
 
 	// Name of problem used for directory creation
-	m_name = "MYBreakRoughTank_v5";
+	//m_name = "MYBreakRoughTank_v5";
 
 	GeometryID dem = addDEM(dem_file);
 
@@ -272,23 +286,23 @@ MYBreakRoughTank_v5::moving_bodies_callback(const uint index, Object* object, co
 	}
 }
 
-void MYBreakRoughTank_v5::copy_planes(PlaneList &planes)
-{
-	const double w = m_size.y;
-	const double l = h_length + slope_length + slope2_length;
+//void MYBreakRoughTank_v5::copy_planes(PlaneList &planes)
+//{
+//	const double w = m_size.y;
+//	const double l = h_length + slope_length + slope2_length;
 
 	//  plane is defined as a x + by +c z + d= 0
-	planes.push_back( implicit_plane(0, 0, 1.0, 0) );   //bottom, where the first three numbers are the normal, and the last is d.
-	planes.push_back( implicit_plane(0, 1.0, 0, 0) );   //wall
-	planes.push_back( implicit_plane(0, -1.0, 0, w) ); //far wall
-	planes.push_back( implicit_plane(1.0, 0, 0, 0) );  //end
-	planes.push_back( implicit_plane(-1.0, 0, 0, l) );  //one end
-	if (use_bottom_plane)  {
-		planes.push_back( implicit_plane(-sin(beta),0,cos(beta), h_length*sin(beta)) );  //sloping bottom starting at x=h_length
-	}
+////	planes.push_back( implicit_plane(0, 0, 1.0, 0) );   //bottom, where the first three numbers are the normal, and the last is d.
+//	planes.push_back( implicit_plane(0, 1.0, 0, 0) );   //wall
+//	planes.push_back( implicit_plane(0, -1.0, 0, w) ); //far wall
+//	planes.push_back( implicit_plane(1.0, 0, 0, 0) );  //end
+//	planes.push_back( implicit_plane(-1.0, 0, 0, l) );  //one end
+//	if (use_bottom_plane)  {
+//		planes.push_back( implicit_plane(-sin(beta),0,cos(beta), h_length*sin(beta)) );  //sloping bottom starting at x=h_length
+//	}
 	//if (use_bottom_plane)  {
 	//	planes.push_back( implicit_plane(-sin(beta_2),0,cos(beta_2), (h_length+slope_length)*sin(beta_2)-cos(beta_2)*tan(beta)*slope_length) );
 	//}
-}
+//}
 
 #undef MK_par
