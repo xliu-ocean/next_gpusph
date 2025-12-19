@@ -45,7 +45,7 @@ WaveTank::WaveTank(GlobalData *_gdata) : Problem(_gdata)
 	// Add objects to the tank
 	const bool use_cyl = get_option("cylinder", false);
 	// Density diffusion type
-	const DensityDiffusionType RHODIFF = get_option("density-diffusion", DELTA_SPH);
+	const DensityDiffusionType RHODIFF = get_option("density-diffusion", FERRARI);
 
 	if (use_bottom_plane && !use_planes)
 		throw std::invalid_argument("cannot use bottom plane if not using planes");
@@ -90,6 +90,7 @@ WaveTank::WaveTank(GlobalData *_gdata) : Problem(_gdata)
 	simparams()->dtadaptfactor = 0.2;
 	simparams()->buildneibsfreq = 10;
 	simparams()->tend = 10.0f; //seconds
+	simparams()->densityDiffCoeff = 1.0;
 
 	//WaveGage
 	if (get_option("gages", false)) {
