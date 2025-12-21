@@ -47,7 +47,7 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	// Density diffusion type
 	const DensityDiffusionType RHODIFF = get_option("density-diffusion", FERRARI);
 
-	const bool use_geometries = get_option("use-geometries", false);
+	const bool use_geometries = get_option("use-geometries", true);
 
 	if (use_bottom_plane && !use_planes)
 		throw std::invalid_argument("cannot use bottom plane if not using planes");
@@ -159,7 +159,8 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	//m_name = "MYBreakRoughTank_v5";
 
 	//GeometryID dem = addDEM(dem_file);
-	addDEM(dem_file, DEM_FMT_ASCII, use_geometries ? FT_NOFILL : FT_BORDER);
+	//addDEM(dem_file, DEM_FMT_ASCII, use_geometries ? FT_NOFILL : FT_BORDER);
+	addDEM(dem_file, DEM_FMT_ASCII, FT_BORDER);
 
 	// Building the geometry
 	//const float br = (simparams()->boundarytype == MK_BOUNDARY ? m_deltap/MK_par : r0);
