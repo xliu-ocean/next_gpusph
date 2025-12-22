@@ -177,7 +177,7 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	//Point(0, 0, 0), h_length + slope_length + slope2_length,ly, height);
 	//disableCollisions(experiment_box);
 
-  const float amplitude = -paddle_amplitude ;
+	const float amplitude = -paddle_amplitude ;
 	GeometryID paddle = addBox(GT_MOVING_BODY, FT_BORDER,
 		Point(paddle_origin),	0, paddle_width, paddle_length);
 	//rotate(paddle, 0,-amplitude, 0);
@@ -185,19 +185,20 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 
 	double rot_correction1 = sin(beta)*box_thickness;
 	//double rot_correction2 = sin(beta_2)*box_thickness;
-	//if (!use_bottom_plane) {
+	if (!use_bottom_plane) {
 		//GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
 		//		Point(h_length, 0, 0), 0, ly, paddle_length);
 		//	Vector(slope_length/cos(beta), 0.0, slope_length*tan(beta)));
 		GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                                 slope_origin + make_double3(rot_correction1, 0, (1-cos(beta))*box_thickness),
                                 lx - h_length - rot_correction1, ly, box_thickness);
+		rotate(bottom, 0, beta, 0);
 	//	disableCollisions(bottom);
 	//}
 	//if (!use_bottom_plane)  {
         //      addPlane(-sin(beta),0,cos(beta), h_length*sin(beta)) ;  //sloping bottom starting at x=h_length
         //      addPlane(-sin(beta_2),0,cos(beta_2), (h_length+slope_length)*sin(beta_2)-cos(beta_2)*tan(beta)*slope_length);
-        //}
+        }
 
 	//GeometryID dem = addDEM(dem_file);
 	if (use_planes) {
