@@ -39,7 +39,7 @@
 MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 {
 	// use planes in general
-	const bool use_planes = get_option("use_planes", false);
+	const bool use_planes = get_option("use_planes", true);
 	// use a plane for the bottom
 	const bool use_bottom_plane = get_option("bottom-plane", use_planes);
 	// Add objects to the tank
@@ -47,10 +47,10 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	// Density diffusion type
 	const DensityDiffusionType RHODIFF = get_option("density-diffusion", FERRARI);
 
-	const bool use_geometries = get_option("use-geometries", true);
+	//const bool use_geometries = get_option("use-geometries", true);
 
-	if (use_bottom_plane && !use_planes)
-		throw std::invalid_argument("cannot use bottom plane if not using planes");
+	//if (use_bottom_plane && !use_planes)
+	//	throw std::invalid_argument("cannot use bottom plane if not using planes");
 
 	// Size and origin of the simulation domain
 	lx = 82.5;
@@ -69,15 +69,16 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
         beta_2 = 11.30993*M_PI/180.0; //b1/eta for run-up slope
 
 	// add DEM
-	const string dem_file = get_option("dem", "cobble_surface_with_slope.txt");
+	//const string dem_file = get_option("dem", "cobble_surface_with_slope.txt");
 
 
 	SETUP_FRAMEWORK(
 		viscosity<SPSVISC>,
 		boundary<DUMMY_BOUNDARY>
 	).select_options(
-		RHODIFF,use_geometries,
-		add_flags<ENABLE_DEM|ENABLE_PLANES>()
+		RHODIFF,
+//		add_flags<ENABLE_DEM|ENABLE_PLANES>()
+		add_flags<ENABLE_PLANES>()
 		//add_flags<ENABLE_DEM | ENABLE_PLANES>
 	);
 
@@ -160,7 +161,7 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 
 	//GeometryID dem = addDEM(dem_file);
 	//addDEM(dem_file, DEM_FMT_ASCII, use_geometries ? FT_NOFILL : FT_BORDER);
-	addDEM(dem_file, DEM_FMT_ASCII, FT_BORDER);
+	//addDEM(dem_file, DEM_FMT_ASCII, FT_BORDER);
 
 	// Building the geometry
 	//const float br = (simparams()->boundarytype == MK_BOUNDARY ? m_deltap/MK_par : r0);
@@ -182,14 +183,33 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	//rotate(paddle, 0,-amplitude, 0);
 	disableCollisions(paddle);
 
-	if (!use_bottom_plane) {
-		GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-				Point(h_length, 0, 0), 0, ly, paddle_length);
+	//double rot_correction1 = sin(beta)*box_thickness;
+	//double rot_correction2 = sin(beta_2)*box_thickness;
+	//if (!use_bottom_plane) {
+		//GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+		//		Point(h_length, 0, 0), 0, ly, paddle_length);
 		//	Vector(slope_length/cos(beta), 0.0, slope_length*tan(beta)));
-		disableCollisions(bottom);
-	}
-	//GeometryID dem = addDEM(dem_file);
+	//	GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+        //                        slope_origin + make_double3(rot_correction, 0, (1-cos(beta))*box_thickness),
+        //                        lx - h_length - rot_correction, ly, box_thickness);
+	//	disableCollisions(bottom);
+	//}
+	if (use_bottom_plane)  {
+              addPlane(-sin(beta),0,cos(beta), h_length*sin(beta)) ;  //sloping bottom starting at x=h_length
+              addPlane(-sin(beta_2),0,cos(beta_2), (h_length+slope_length)*sin(beta_2)-cos(beta_2)*tan(beta)*slope_length);
+        }
 
+	//GeometryID dem = addDEM(dem_file);
+	if (use_planes) {
+                const double w = m_size.y;
+                const double l = h_length + slope_length;
+
+                addPlane(0, 0, 1, 0);  //bottom, where the first three numbers are the normal, and the last is d.
+                addPlane(0, 1, 0, 0);  //wall
+                addPlane(0, -1, 0, w); //far wall
+                addPlane(1.0, 0, 0, 0);   //end
+                addPlane(-1.0, 0, 0, l);  //one end
+	}
 	GeometryID fluid;
 	float z = 0;
 	int n = 0;
