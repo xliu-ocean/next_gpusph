@@ -39,7 +39,7 @@
 MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 {
 	// use planes in general
-	const bool use_planes = get_option("use_planes", true);
+	const bool use_planes = get_option("use_planes", false);
 	// use a plane for the bottom
 	const bool use_bottom_plane = get_option("bottom-plane", use_planes);
 	// Add objects to the tank
@@ -173,9 +173,9 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 
 	setPositioning(PP_CORNER);
 
-	GeometryID experiment_box = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-	Point(0, 0, 0), h_length + slope_length + slope2_length,ly, height);
-	disableCollisions(experiment_box);
+	//GeometryID experiment_box = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+	//Point(0, 0, 0), h_length + slope_length + slope2_length,ly, height);
+	//disableCollisions(experiment_box);
 
   const float amplitude = -paddle_amplitude ;
 	GeometryID paddle = addBox(GT_MOVING_BODY, FT_BORDER,
@@ -194,7 +194,7 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
         //                        lx - h_length - rot_correction, ly, box_thickness);
 	//	disableCollisions(bottom);
 	//}
-	if (use_bottom_plane)  {
+	if (!use_bottom_plane)  {
               addPlane(-sin(beta),0,cos(beta), h_length*sin(beta)) ;  //sloping bottom starting at x=h_length
               addPlane(-sin(beta_2),0,cos(beta_2), (h_length+slope_length)*sin(beta_2)-cos(beta_2)*tan(beta)*slope_length);
         }
@@ -210,7 +210,26 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
                 addPlane(0, -1, 0, w); //far wall
                 addPlane(1.0, 0, 0, 0);   //end
                 addPlane(-1.0, 0, 0, l);  //one end
-	}
+	} else {
+                // flat bottom rectangle (before the slope begins)
+                GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+                        Point(paddle_origin - make_double3(box_thickness, m_deltap, box_thickness)),
+                        h_length + box_thickness + slope_length + slope2_length, ly, box_thickness);
+                setUnfillRadius(bottom, 0.5*m_deltap);
+
+                const double wall_height = paddle_length + box_thickness + (lz - paddle_length)/3.0;
+                // close wall
+                GeometryID wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+                        //Point(m_origin - make_double3(0, box_thickness, box_thickness)),
+                        Point(make_double3(0,0,0) - make_double3(0, box_thickness, box_thickness)),
+                        lx + paddle_origin.x, box_thickness, wall_height);
+
+                // far wall
+                wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+                        //Point(m_origin + make_double3(0, ly, -box_thickness)),
+                        Point(make_double3(0,0,0) + make_double3(0, ly, -box_thickness)),
+                        lx + paddle_origin.x, box_thickness, wall_height);
+        }
 	GeometryID fluid;
 	float z = 0;
 	int n = 0;
