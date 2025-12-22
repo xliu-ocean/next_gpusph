@@ -76,7 +76,7 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 		viscosity<SPSVISC>,
 		boundary<DUMMY_BOUNDARY>
 	).select_options(
-		RHODIFF,
+		RHODIFF,use_planes,
 //		add_flags<ENABLE_DEM|ENABLE_PLANES>()
 		add_flags<ENABLE_PLANES>()
 		//add_flags<ENABLE_DEM | ENABLE_PLANES>
@@ -202,7 +202,8 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	//GeometryID dem = addDEM(dem_file);
 	if (use_planes) {
                 const double w = m_size.y;
-                const double l = h_length + slope_length;
+                //const double l = h_length + slope_length;
+		const double l = h_length + slope_length + slope2_length;
 
                 addPlane(0, 0, 1, 0);  //bottom, where the first three numbers are the normal, and the last is d.
                 addPlane(0, 1, 0, 0);  //wall
