@@ -136,7 +136,7 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 
 	//Wave paddle definition:  location, start & stop times, stroke and frequency (2 \pi/period)
 	//paddle_length = .7f;
-	paddle_length = 2.0f;
+	paddle_length = 2.3f;
 	//paddle_width = m_size.y - 2*r0;
 	paddle_width = ly -.2*r0;
 	//paddle_tstart=0.5f;
