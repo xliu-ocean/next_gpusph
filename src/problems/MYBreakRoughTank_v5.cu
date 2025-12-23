@@ -179,9 +179,11 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 
 	const float amplitude = -paddle_amplitude ;
 	GeometryID paddle = addBox(GT_MOVING_BODY, FT_BORDER,
-		Point(paddle_origin),	0, paddle_width, paddle_length);
+		Point(paddle_origin- make_double3(box_thickness, 0, 0)),
+		box_thickness, paddle_width, paddle_length);
 	//rotate(paddle, 0,-amplitude, 0);
-	disableCollisions(paddle);
+	rotate(paddle, 0, 0, 0);
+	//disableCollisions(paddle);
 
 	double rot_correction1 = sin(beta)*box_thickness;
 	//double rot_correction2 = sin(beta_2)*box_thickness;
