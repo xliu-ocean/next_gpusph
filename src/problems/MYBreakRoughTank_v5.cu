@@ -45,7 +45,7 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	// Add objects to the tank
 	const bool use_cyl = get_option("cylinder", false);
 	// Density diffusion type
-	const DensityDiffusionType RHODIFF = get_option("density-diffusion", FERRARI);
+	const DensityDiffusionType RHODIFF = get_option("density-diffusion", DELTA-SPH);
 
 	//const bool use_geometries = get_option("use-geometries", true);
 
@@ -232,6 +232,11 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
                         //Point(m_origin + make_double3(0, ly, -box_thickness)),
                         Point(make_double3(0,0,0) + make_double3(0, ly, -box_thickness)),
                         lx + paddle_origin.x, box_thickness, wall_height);
+		// end wall
+                wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+                        //Point(m_origin + make_double3(0, ly, -box_thickness)),
+                        Point(make_double3(0,0,0) + make_double3(lx,0, -box_thickness)),
+                        box_thickness, ly,  wall_height);
         }
 	// these planes are used at least for cutting, so they are always defined
         {
