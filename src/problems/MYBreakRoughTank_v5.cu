@@ -45,7 +45,7 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	// Add objects to the tank
 	const bool use_cyl = get_option("cylinder", false);
 	// Density diffusion type
-	const DensityDiffusionType RHODIFF = get_option("density-diffusion", DELTA-SPH);
+	const DensityDiffusionType RHODIFF = get_option("density-diffusion", FERRARI);
 
 	//const bool use_geometries = get_option("use-geometries", true);
 
@@ -113,7 +113,7 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	simparams()->dtadaptfactor = 0.2;
 	simparams()->buildneibsfreq = 10;
 	simparams()->tend = 20.0f; //seconds
-	//simparams()->densityDiffCoeff = 1.0;
+	simparams()->densityDiffCoeff = 1.0;
 
 	//WaveGage
 	if (get_option("gages", false)) {
