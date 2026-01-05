@@ -169,7 +169,7 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
                 simparams()->get_influence_layers() : 1;
         const double box_thickness = (num_layers - 1)*m_deltap;
         const double3 slope_origin = make_double3(paddle_origin.x + h_length, 0, -box_thickness);
-	const double3 slope_origin_2 = make_double3(paddle_origin.x + h_length + slope_legnth, 0, slope_length*tan(beta)-box_thickness);
+	const double3 slope_origin_2 = make_double3(paddle_origin.x + h_length + slope_length, 0, slope_length*tan(beta)-box_thickness);
         setDynamicBoundariesLayers(num_layers);
 
 	setPositioning(PP_CORNER);
