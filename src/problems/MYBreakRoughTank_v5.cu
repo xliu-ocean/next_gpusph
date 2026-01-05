@@ -169,6 +169,7 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
                 simparams()->get_influence_layers() : 1;
         const double box_thickness = (num_layers - 1)*m_deltap;
         const double3 slope_origin = make_double3(paddle_origin.x + h_length, 0, -box_thickness);
+	const double3 slope_origin_2 = make_double3(paddle_origin.x + h_length + slope_legnth, 0, slope_length*tan(beta)-box_thickness);
         setDynamicBoundariesLayers(num_layers);
 
 	setPositioning(PP_CORNER);
@@ -186,15 +187,19 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	//disableCollisions(paddle);
 
 	double rot_correction1 = sin(beta)*box_thickness;
-	//double rot_correction2 = sin(beta_2)*box_thickness;
+	double rot_correction2 = sin(beta_2)*box_thickness;
 	if (!use_bottom_plane) {
 		//GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
 		//		Point(h_length, 0, 0), 0, ly, paddle_length);
 		//	Vector(slope_length/cos(beta), 0.0, slope_length*tan(beta)));
 		GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                                 slope_origin + make_double3(rot_correction1, 0, (1-cos(beta))*box_thickness),
-                                lx - h_length - rot_correction1, ly, box_thickness);
+                                (slope_length - rot_correction1)/cos(beta), ly, box_thickness);
 		rotate(bottom, 0, beta, 0);
+		GeometryID bottom2 = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+                                slope_origin_2 + make_double3(rot_correction2, 0, (1-cos(beta_2))*box_thickness),
+                                (slope2_length - rot_correction2)/cos(beta_2), ly, box_thickness);
+		rotate(bottom2, 0, beta_2, 0);
 	//	disableCollisions(bottom);
 	//}
 	//if (!use_bottom_plane)  {
@@ -221,6 +226,7 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
                 setUnfillRadius(bottom, 0.5*m_deltap);
 
                 const double wall_height = paddle_length + box_thickness + (lz - paddle_length)/3.0;
+		cout << "\nwall height: " << wall_height << "\n";
                 // close wall
                 GeometryID wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                         //Point(m_origin - make_double3(0, box_thickness, box_thickness)),
