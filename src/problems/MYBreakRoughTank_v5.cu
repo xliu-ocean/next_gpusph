@@ -241,7 +241,7 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 		// end wall
                 wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                         //Point(m_origin + make_double3(0, ly, -box_thickness)),
-                        Point(make_double3(0,0,0) + make_double3(lx,0, -box_thickness)),
+                        Point(make_double3(0,0,0) + make_double3(h_length+slope_length+slope2_length,0, -box_thickness)),
                         box_thickness, ly,  lz);
         }
 	// these planes are used at least for cutting, so they are always defined
