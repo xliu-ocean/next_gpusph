@@ -242,7 +242,7 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
                 wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                         //Point(m_origin + make_double3(0, ly, -box_thickness)),
                         Point(make_double3(0,0,0) + make_double3(lx,0, -box_thickness)),
-                        box_thickness, ly,  wall_height);
+                        box_thickness, ly,  lz);
         }
 	// these planes are used at least for cutting, so they are always defined
         {
@@ -258,6 +258,18 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
                 // this plane cuts the lateral walls below the sloping ground
                 plane = addPlane(-sin(beta), 0, cos(beta),
                         slope_origin.x*sin(beta) + 2*(m_deltap + box_thickness*cos(beta)),
+                        FT_UNFILL);
+
+                setEraseOperation(plane, ET_ERASE_BOUNDARY);
+
+		GeometryID plane = addPlane(-sin(beta_2), 0, cos(beta_2), slope_origin_2.x*sin(beta_2),
+                        use_bottom_plane ? FT_NOFILL : FT_UNFILL);
+
+                setEraseOperation(plane, ET_ERASE_FLUID);
+
+                // this plane cuts the lateral walls below the sloping ground
+                plane = addPlane(-sin(beta_2), 0, cos(beta_2),
+                        slope_origin.x*sin(beta_2) + 2*(m_deltap + box_thickness*cos(beta_2)),
                         FT_UNFILL);
 
                 setEraseOperation(plane, ET_ERASE_BOUNDARY);
