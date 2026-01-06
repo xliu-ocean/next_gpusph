@@ -269,7 +269,7 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 
                 // this plane cuts the lateral walls below the sloping ground
                 plane = addPlane(-sin(beta_2), 0, cos(beta_2),
-                        slope_origin_2.x*sin(beta_2) + slope_length*sin(beta) + 2*(m_deltap + box_thickness*cos(beta_2)),
+                        slope_origin_2.x*sin(beta_2) - slope_length*sin(beta) + 2*(m_deltap + box_thickness*cos(beta_2)),
                         FT_UNFILL);
 		cout << "\nslope 2: " << slope_origin_2.x << "\n";
 		cout << "\nslope 2: " << 2*(m_deltap + box_thickness*cos(beta_2)) << "\n";
