@@ -231,13 +231,13 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
                 GeometryID wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                         //Point(m_origin - make_double3(0, box_thickness, box_thickness)),
                         Point(make_double3(0,0,0) - make_double3(0, box_thickness, box_thickness)),
-                        lx + paddle_origin.x, box_thickness, wall_height);
+                        lx + paddle_origin.x, box_thickness, lz);
 
                 // far wall
                 wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                         //Point(m_origin + make_double3(0, ly, -box_thickness)),
                         Point(make_double3(0,0,0) + make_double3(0, ly, -box_thickness)),
-                        lx + paddle_origin.x, box_thickness, wall_height);
+                        lx + paddle_origin.x, box_thickness, lz);
 		// end wall
                 wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                         //Point(m_origin + make_double3(0, ly, -box_thickness)),
@@ -271,8 +271,6 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
                 plane = addPlane(-sin(beta_2), 0, cos(beta_2),
                         slope_origin_2.x*sin(beta_2) - slope_length*sin(beta) + 2*(m_deltap + box_thickness*cos(beta_2)),
                         FT_UNFILL);
-		cout << "\nslope 2: " << slope_origin_2.x << "\n";
-		cout << "\nslope 2: " << 2*(m_deltap + box_thickness*cos(beta_2)) << "\n";
 
                 setEraseOperation(plane, ET_ERASE_BOUNDARY);
 
