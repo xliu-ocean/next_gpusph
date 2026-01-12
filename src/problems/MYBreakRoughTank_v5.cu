@@ -283,6 +283,7 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 
                 setEraseOperation(plane, ET_ERASE_FLUID);
         }
+	addDEMFluidBox(0.8);
 	GeometryID fluid;
 	float z = 0;
 	int n = 0;
@@ -300,8 +301,8 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
                 } else {
                      l = h_length-10;
                 }
-		fluid = addRect(GT_FLUID, FT_SOLID, Point(x,  r0, z),
-				l, ly-2.0*r0);
+		//fluid = addRect(GT_FLUID, FT_SOLID, Point(x,  r0, z),
+	//			l, ly-2.0*r0);
 		n++;
 	 }
 // activate the solid obstacle
