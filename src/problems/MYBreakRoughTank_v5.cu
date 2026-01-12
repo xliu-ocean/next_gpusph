@@ -287,7 +287,7 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	float z = 0;
 	int n = 0;
 	while (z < H) {
-		z = n*(m_deltap+1e-6) + 1.5*r0;    //z = n*m_deltap + 1.5*r0;
+		z = n*(m_deltap+1e-6) + 1.5*r0 +r0;    //z = n*m_deltap + 1.5*r0;
 		//float x = paddle_origin.x + (z - paddle_origin.z)*tan(amplitude) + 1.0*r0/cos(amplitude);
 		float x = paddle_origin.x +r0;
 		//float l = h_length + z/tan(beta) - 1.5*r0/sin(beta) - x;
