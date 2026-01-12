@@ -161,7 +161,7 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
 
 	//GeometryID dem = addDEM(dem_file);
 	//addDEM(dem_file, DEM_FMT_ASCII, use_geometries ? FT_NOFILL : FT_BORDER);
-	//addDEM(dem_file, DEM_FMT_ASCII, FT_BORDER);
+	addDEM(dem_file, DEM_FMT_ASCII, FT_BORDER);
 
 	// Building the geometry
 	//const float br = (simparams()->boundarytype == MK_BOUNDARY ? m_deltap/MK_par : r0);
@@ -283,7 +283,7 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
 
                 setEraseOperation(plane, ET_ERASE_FLUID);
         }
-	addDEMFluidBox(0.8);
+	//addDEMFluidBox(0.8);
 	GeometryID fluid;
 	float z = 0;
 	int n = 0;
