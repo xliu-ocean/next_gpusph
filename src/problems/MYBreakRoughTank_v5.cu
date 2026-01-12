@@ -69,7 +69,7 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
         beta_2 = 11.30993*M_PI/180.0; //b1/eta for run-up slope
 
 	// add DEM
-	//const string dem_file = get_option("dem", "cobble_surface_with_slope.txt");
+	const string dem_file = get_option("dem", "cobble_surface_simple_test.txt");
 
 
 	SETUP_FRAMEWORK(
@@ -77,8 +77,8 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 		boundary<DUMMY_BOUNDARY>
 	).select_options(
 		RHODIFF,use_planes,
-//		add_flags<ENABLE_DEM|ENABLE_PLANES>()
-		add_flags<ENABLE_PLANES>()
+		add_flags<ENABLE_DEM|ENABLE_PLANES>()
+//		add_flags<ENABLE_PLANES>()
 		//add_flags<ENABLE_DEM | ENABLE_PLANES>
 	);
 
@@ -159,8 +159,8 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	// Name of problem used for directory creation
 	//m_name = "MYBreakRoughTank_v5";
 
-	//GeometryID dem = addDEM(dem_file);
-	//addDEM(dem_file, DEM_FMT_ASCII, use_geometries ? FT_NOFILL : FT_BORDER);
+	GeometryID dem = addDEM(dem_file);
+	addDEM(dem_file, DEM_FMT_ASCII, use_geometries ? FT_NOFILL : FT_BORDER);
 	//addDEM(dem_file, DEM_FMT_ASCII, FT_BORDER);
 
 	// Building the geometry
