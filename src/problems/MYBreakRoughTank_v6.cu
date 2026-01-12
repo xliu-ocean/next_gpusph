@@ -179,33 +179,33 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
 	//disableCollisions(experiment_box);
 
 	const float amplitude = -paddle_amplitude ;
-	GeometryID paddle = addBox(GT_MOVING_BODY, FT_BORDER,
-		Point(paddle_origin- make_double3(box_thickness, 0, 0)),
-		box_thickness, paddle_width, paddle_length);
+	//GeometryID paddle = addBox(GT_MOVING_BODY, FT_BORDER,
+	//	Point(paddle_origin- make_double3(box_thickness, 0, 0)),
+	//	box_thickness, paddle_width, paddle_length);
 	//rotate(paddle, 0,-amplitude, 0);
-	rotate(paddle, 0, 0, 0);
+	//rotate(paddle, 0, 0, 0);
 	//disableCollisions(paddle);
 
 	double rot_correction1 = sin(beta)*box_thickness;
 	double rot_correction2 = sin(beta_2)*box_thickness;
-	if (!use_bottom_plane) {
+	//if (!use_bottom_plane) {
 		//GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
 		//		Point(h_length, 0, 0), 0, ly, paddle_length);
 		//	Vector(slope_length/cos(beta), 0.0, slope_length*tan(beta)));
-		GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-                                slope_origin + make_double3(rot_correction1, 0, (1-cos(beta))*box_thickness),
-                                (slope_length - rot_correction1)/cos(beta), ly, box_thickness);
-		rotate(bottom, 0, beta, 0);
-		GeometryID bottom2 = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-                                slope_origin_2 + make_double3(rot_correction2, 0, (1-cos(beta_2))*box_thickness),
-                                (slope2_length - rot_correction2)/cos(beta_2), ly, box_thickness);
-		rotate(bottom2, 0, beta_2, 0);
+	//	GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+        //                        slope_origin + make_double3(rot_correction1, 0, (1-cos(beta))*box_thickness),
+        //                        (slope_length - rot_correction1)/cos(beta), ly, box_thickness);
+	//	rotate(bottom, 0, beta, 0);
+	//	GeometryID bottom2 = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+        //                        slope_origin_2 + make_double3(rot_correction2, 0, (1-cos(beta_2))*box_thickness),
+        //                        (slope2_length - rot_correction2)/cos(beta_2), ly, box_thickness);
+	//	rotate(bottom2, 0, beta_2, 0);
 	//	disableCollisions(bottom);
 	//}
 	//if (!use_bottom_plane)  {
         //      addPlane(-sin(beta),0,cos(beta), h_length*sin(beta)) ;  //sloping bottom starting at x=h_length
         //      addPlane(-sin(beta_2),0,cos(beta_2), (h_length+slope_length)*sin(beta_2)-cos(beta_2)*tan(beta)*slope_length);
-        }
+        //}
 
 	//GeometryID dem = addDEM(dem_file);
 	if (use_planes) {
@@ -218,31 +218,31 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
                 addPlane(0, -1, 0, w); //far wall
                 addPlane(1.0, 0, 0, 0);   //end
                 addPlane(-1.0, 0, 0, l);  //one end
-	} else {
+	//} else {
                 // flat bottom rectangle (before the slope begins)
-                GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-                        Point(paddle_origin - make_double3(box_thickness, m_deltap, box_thickness)),
-                        h_length + box_thickness + rot_correction1, ly, box_thickness);
-                setUnfillRadius(bottom, 0.5*m_deltap);
+        //        GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+        //                Point(paddle_origin - make_double3(box_thickness, m_deltap, box_thickness)),
+        //                h_length + box_thickness + rot_correction1, ly, box_thickness);
+        //        setUnfillRadius(bottom, 0.5*m_deltap);
 
-                const double wall_height = paddle_length + box_thickness + (lz - paddle_length)/3.0;
-		cout << "\nwall height: " << wall_height << "\n";
+        //        const double wall_height = paddle_length + box_thickness + (lz - paddle_length)/3.0;
+	//	cout << "\nwall height: " << wall_height << "\n";
                 // close wall
-                GeometryID wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+        //        GeometryID wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                         //Point(m_origin - make_double3(0, box_thickness, box_thickness)),
-                        Point(make_double3(0,0,0) - make_double3(0, box_thickness, box_thickness)),
-                        lx + paddle_origin.x, box_thickness, lz);
+        //                Point(make_double3(0,0,0) - make_double3(0, box_thickness, box_thickness)),
+        //                lx + paddle_origin.x, box_thickness, lz);
 
                 // far wall
-                wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+        //        wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                         //Point(m_origin + make_double3(0, ly, -box_thickness)),
-                        Point(make_double3(0,0,0) + make_double3(0, ly, -box_thickness)),
-                        lx + paddle_origin.x, box_thickness, lz);
+        //                Point(make_double3(0,0,0) + make_double3(0, ly, -box_thickness)),
+        //                lx + paddle_origin.x, box_thickness, lz);
 		// end wall
-                wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+        //        wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                         //Point(m_origin + make_double3(0, ly, -box_thickness)),
-                        Point(make_double3(0,0,0) + make_double3(h_length+slope_length+slope2_length,0, -box_thickness)),
-                        box_thickness, ly,  lz);
+        //                Point(make_double3(0,0,0) + make_double3(h_length+slope_length+slope2_length,0, -box_thickness)),
+        //                box_thickness, ly,  lz);
         }
 	// these planes are used at least for cutting, so they are always defined
         {
