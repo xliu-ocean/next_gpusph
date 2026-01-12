@@ -69,7 +69,7 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
         beta_2 = 11.30993*M_PI/180.0; //b1/eta for run-up slope
 
 	// add DEM
-	const string dem_file = get_option("dem", "cobble_surface_simple_test_3.txt");
+	const string dem_file = get_option("dem", "cobble_surface_simple_test_4.txt");
 
 
 	SETUP_FRAMEWORK(
