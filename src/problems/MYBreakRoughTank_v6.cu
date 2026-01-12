@@ -284,11 +284,11 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
                 setEraseOperation(plane, ET_ERASE_FLUID);
         }
 	addDEMFluidBox(0.8);
-	{
-		GeometryID plane = addPlane(0, 0, 1, -0.1,
-                        use_bottom_plane ? FT_NOFILL : FT_UNFILL);
-		setEraseOperation(plane, ET_ERASE_FLUID);
-	}
+	//{
+	//	GeometryID plane = addPlane(0, 0, 1, -0.1,
+        //               use_bottom_plane ? FT_NOFILL : FT_UNFILL);
+	//	setEraseOperation(plane, ET_ERASE_FLUID);
+	//}
 	addExtraWorldMargin(5*m_deltap);
 	GeometryID fluid;
 	float z = 0;
