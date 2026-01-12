@@ -161,7 +161,7 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
 
 	//GeometryID dem = addDEM(dem_file);
 	//addDEM(dem_file, DEM_FMT_ASCII, use_geometries ? FT_NOFILL : FT_BORDER);
-	addDEM(dem_file, DEM_FMT_ASCII, FT_BORDER);
+	//addDEM(dem_file, DEM_FMT_ASCII, FT_BORDER);
 
 	// Building the geometry
 	//const float br = (simparams()->boundarytype == MK_BOUNDARY ? m_deltap/MK_par : r0);
@@ -301,8 +301,8 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
                 } else {
                      l = h_length-10;
                 }
-		//fluid = addRect(GT_FLUID, FT_SOLID, Point(x,  r0, z),
-	//			l, ly-2.0*r0);
+		fluid = addRect(GT_FLUID, FT_SOLID, Point(x,  r0, z),
+				10.0, ly-2.0*r0);
 		n++;
 	 }
 // activate the solid obstacle
