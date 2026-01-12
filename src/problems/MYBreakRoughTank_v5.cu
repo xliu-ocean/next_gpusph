@@ -159,7 +159,7 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	// Name of problem used for directory creation
 	//m_name = "MYBreakRoughTank_v5";
 
-	GeometryID dem = addDEM(dem_file);
+	//GeometryID dem = addDEM(dem_file);
 	addDEM(dem_file, DEM_FMT_ASCII, use_geometries ? FT_NOFILL : FT_BORDER);
 	//addDEM(dem_file, DEM_FMT_ASCII, FT_BORDER);
 
