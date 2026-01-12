@@ -283,7 +283,17 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
 
                 setEraseOperation(plane, ET_ERASE_FLUID);
         }
-	//addDEMFluidBox(0.8);
+	addDEMFluidBox(0.8);
+	if (HAS_PLANES(simparams()->simflags)) {
+                // Add geometric planes around the DEM boundary. Individual planes can be
+                // manipulated by assigning the resulting vector<GeometryID>
+                // to a variable and then extracting the planes we are interested in
+                addDEMPlanes();
+        } else if (simparams()->boundary_is_multilayer()) {
+                // DEM boundaries start one layer out, so we need an extra deltap of margin
+                // TODO FIXME this should be handled automatically
+                addExtraWorldMargin(m_deltap);
+        }
 	GeometryID fluid;
 	float z = 0;
 	int n = 0;
@@ -301,8 +311,8 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
                 } else {
                      l = h_length-10;
                 }
-		fluid = addRect(GT_FLUID, FT_SOLID, Point(x,  r0, z),
-				10.0, ly-2.0*r0);
+	//	fluid = addRect(GT_FLUID, FT_SOLID, Point(x,  r0, z),
+	//			10.0, ly-2.0*r0);
 		n++;
 	 }
 // activate the solid obstacle
