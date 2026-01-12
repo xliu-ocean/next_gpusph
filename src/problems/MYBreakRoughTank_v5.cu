@@ -76,7 +76,7 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 		viscosity<SPSVISC>,
 		boundary<DUMMY_BOUNDARY>
 	).select_options(
-		RHODIFF,use_planes,use_geometries,
+		RHODIFF,use_geometries,
 		add_flags<ENABLE_DEM|ENABLE_PLANES>()
 //		add_flags<ENABLE_PLANES>()
 		//add_flags<ENABLE_DEM | ENABLE_PLANES>
@@ -160,8 +160,8 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	//m_name = "MYBreakRoughTank_v5";
 
 	//GeometryID dem = addDEM(dem_file);
-	addDEM(dem_file, DEM_FMT_ASCII, use_geometries ? FT_NOFILL : FT_BORDER);
-	//addDEM(dem_file, DEM_FMT_ASCII, FT_BORDER);
+	//addDEM(dem_file, DEM_FMT_ASCII, use_geometries ? FT_NOFILL : FT_BORDER);
+	addDEM(dem_file, DEM_FMT_ASCII, FT_BORDER);
 
 	// Building the geometry
 	//const float br = (simparams()->boundarytype == MK_BOUNDARY ? m_deltap/MK_par : r0);
