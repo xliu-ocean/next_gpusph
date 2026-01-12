@@ -76,7 +76,7 @@ MYBreakRoughTank_v5::MYBreakRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 		viscosity<SPSVISC>,
 		boundary<DUMMY_BOUNDARY>
 	).select_options(
-		RHODIFF,use_planes,
+		RHODIFF,use_planes,use_geometries,
 		add_flags<ENABLE_DEM|ENABLE_PLANES>()
 //		add_flags<ENABLE_PLANES>()
 		//add_flags<ENABLE_DEM | ENABLE_PLANES>
