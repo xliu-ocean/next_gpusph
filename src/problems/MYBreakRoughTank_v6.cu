@@ -289,7 +289,7 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
                         use_bottom_plane ? FT_NOFILL : FT_UNFILL);
 		setEraseOperation(plane, ET_ERASE_FLUID);
 	}
-	addExtraWorldMargin(3*m_deltap);
+	addExtraWorldMargin(5*m_deltap);
 	GeometryID fluid;
 	float z = 0;
 	int n = 0;
