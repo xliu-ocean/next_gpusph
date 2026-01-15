@@ -81,8 +81,8 @@ WaveTank::WaveTank(GlobalData *_gdata) : Problem(_gdata)
 		addFilter(MLS_FILTER, mlsIters);
 
 
-	m_size = make_double3(lx, ly, lz);
-	m_origin = make_double3(0, 0, 0);
+	//m_size = make_double3(lx, ly, lz);
+	//m_origin = make_double3(0, 0, 0);
 
 	if (get_option("testpoints", false)) {
 		addPostProcess(TESTPOINTS);
@@ -113,7 +113,8 @@ WaveTank::WaveTank(GlobalData *_gdata) : Problem(_gdata)
 
 	//Wave paddle definition:  location, start & stop times, stroke and frequency (2 \pi/period)
 	paddle_length = .7f;
-	paddle_width = m_size.y - 2*r0;
+	//paddle_width = m_size.y - 2*r0;
+	paddle_width = 0.6-2*r0;
 	paddle_tstart = 0.5f;
 	paddle_origin = make_double3(0.25f, r0, 0.0f);
 	paddle_tend = 30.0f;//seconds
@@ -159,7 +160,8 @@ WaveTank::WaveTank(GlobalData *_gdata) : Problem(_gdata)
 	// place the fluid box. Fill the whole domain in the X and Y direction,
 	// up to the at-rest height. This will be “carved out” by the wall and floor
 	// geometries placed afterwards
-	addBox(GT_FLUID, FT_SOLID, m_origin, lx, ly, H);
+	//addBox(GT_FLUID, FT_SOLID, m_origin, lx, ly, H);
+        addBox(GT_FLUID, FT_SOLID, Point(0,0,0), lx, ly, H);
 
 	// place the paddle
 	GeometryID paddle = addBox(GT_MOVING_BODY, FT_BORDER,
@@ -196,12 +198,12 @@ WaveTank::WaveTank(GlobalData *_gdata) : Problem(_gdata)
 		const double wall_height = paddle_length + box_thickness + (lz - paddle_length)/3.0;
 		// close wall
 		GeometryID wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-			Point(m_origin - make_double3(0, box_thickness, box_thickness)),
+			Point(make_double3(0,0,0) - make_double3(0, box_thickness, box_thickness)),
 			lx + paddle_origin.x, box_thickness, wall_height);
 
 		// far wall
 		wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-			Point(m_origin + make_double3(0, ly, -box_thickness)),
+			Point(make_double3(0,0,0) + make_double3(0, ly, -box_thickness)),
 			lx + paddle_origin.x, box_thickness, wall_height);
 	}
 
