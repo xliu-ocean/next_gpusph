@@ -765,9 +765,10 @@ ifeq ($(findstring 64,$(arch)), 64)
   LIB_PATH_SFX = 64
  endif
 else # i386 or i686
- TARGET_ARCH ?= -m32
+ TARGET_ARCH ?=
 endif
 
+LIB_PATH_SFX = 64
 # override: INCPATH - paths for include files
 # override:           add entries in the form: -I/some/path
 INCPATH ?=
