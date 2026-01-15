@@ -230,7 +230,7 @@ SUPPORTED_BACKENDS := cuda cpu
 # override:                     validity is checked by looking for bin/nvcc under it.
 # override:                     nvcc is search for also in /usr/local/cuda and /usr
 # override:                     as fallback
-CUDA_INSTALL_PATH ?=
+CUDA_INSTALL_PATH = $(shell which nvcc | sed "s/\/bin\/nvcc//")
 
 CUDA_SEARCH_PATH := $(CUDA_INSTALL_PATH) $(dir $(dir $(shell command -v "nvcc"))) /usr/local/cuda /usr
 
@@ -759,7 +759,7 @@ LIB_PATH_SFX =
 # override:               defaults to -m64 for 64-bit machines
 # override:                           -m32 for 32-bit machines
 ifeq ($(findstring 64,$(arch)), 64)
- TARGET_ARCH ?= -m64
+ TARGET_ARCH ?= 
  # on Linux, toolkit libraries are under /lib64 for 64-bit
  ifeq ($(platform), Linux)
   LIB_PATH_SFX = 64
