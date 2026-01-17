@@ -291,7 +291,7 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
         }
 	//float water_height = 0.8;
 	addDEMFluidBox(water_height);
-	addExtraWorldMargin(5*m_deltap);
+	//addExtraWorldMargin(5*m_deltap);
 	GeometryID fluid;
 	float z = 0;
 	int n = 0;
