@@ -263,7 +263,7 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
                 //float l = h_length;
                 float l;
                 if (z <= 0.6f) {
-                     l = h_length + z/tan(beta) - r0/sin(beta) - x;
+                     l = h_length + z/tan(beta) - 2*r0/sin(beta) - x;
                 //} else if (z <= 0.8f) {
                 //     l = h_length + 0.5f/tan(beta) + (z-0.5f)/tan(beta_2) - 1.5*r0/sin(beta_2) - x;
                 } else {
@@ -291,7 +291,7 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
 
                 setEraseOperation(plane, ET_ERASE_BOUNDARY);
 
-		plane = addPlane(-sin(beta_2), 0, cos(beta_2), slope_origin_2.x*sin(beta_2)-3*m_deltap,
+		plane = addPlane(-sin(beta_2), 0, cos(beta_2), slope_origin_2.x*sin(beta_2),
                         use_bottom_plane ? FT_NOFILL : FT_UNFILL);
 
                 setEraseOperation(plane, ET_ERASE_FLUID);
