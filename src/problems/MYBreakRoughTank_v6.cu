@@ -291,7 +291,7 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
 
                 setEraseOperation(plane, ET_ERASE_BOUNDARY);
 
-		plane = addPlane(-sin(beta_2), 0, cos(beta_2), slope_origin_2.x*sin(beta_2),
+		plane = addPlane(-sin(beta_2), 0, cos(beta_2), slope_origin_2.x*sin(beta_2)+m_deltap,
                         use_bottom_plane ? FT_NOFILL : FT_UNFILL);
 
                 setEraseOperation(plane, ET_ERASE_FLUID);
