@@ -250,6 +250,29 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
                         Point(make_double3(0,0,0) + make_double3(-box_thickness-m_deltap,0, water_height+m_deltap)),
                         box_thickness, ly,  lz-water_height);
         }
+	GeometryID fluid;
+        float z = 0;
+        int n = 0;
+        while (z < H) {
+                z = n*(m_deltap+1e-6) + 3*r0;    //z = n*m_deltap + 1.5*r0;
+                //z = n*(m_deltap+1e-6) + water_height;
+                //float x = paddle_origin.x + (z - paddle_origin.z)*tan(amplitude) + 1.0*r0/cos(amplitude);
+                //float x = paddle_origin.x +r0;
+                float x = 0.0;
+                //float l = h_length + z/tan(beta) - 1.5*r0/sin(beta) - x;
+                //float l = h_length;
+                float l;
+                if (z <= 0.6f) {
+                     l = h_length + z/tan(beta) - 8*r0/sin(beta) - x;
+                //} else if (z <= 0.8f) {
+                //     l = h_length + 0.5f/tan(beta) + (z-0.5f)/tan(beta_2) - 1.5*r0/sin(beta_2) - x;
+                } else {
+                     l = h_length-10;
+                }
+                fluid = addRect(GT_FLUID, FT_SOLID, Point(x+4*r0,  4*r0, z),
+                                l, ly-8*r0);
+                n++;
+         }
 	// these planes are used at least for cutting, so they are always defined
         {
                 // sloping bottom as a plane. if use_bottom_plane, then it will be
@@ -292,29 +315,9 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
 	//float water_height = 0.8;
 	//addDEMFluidBox(water_height);
 	//addExtraWorldMargin(5*m_deltap);
-	GeometryID fluid;
-	float z = 0;
-	int n = 0;
-	while (z < H) {
-		z = n*(m_deltap+1e-6) + 3*r0;    //z = n*m_deltap + 1.5*r0;
-		//z = n*(m_deltap+1e-6) + water_height;
-		//float x = paddle_origin.x + (z - paddle_origin.z)*tan(amplitude) + 1.0*r0/cos(amplitude);
-		//float x = paddle_origin.x +r0;
-		float x = 0.0;
-		//float l = h_length + z/tan(beta) - 1.5*r0/sin(beta) - x;
-		//float l = h_length;
-		float l;
-                if (z <= 0.6f) {
-                     l = h_length + z/tan(beta) - 8*r0/sin(beta) - x;
-                //} else if (z <= 0.8f) {
-                //     l = h_length + 0.5f/tan(beta) + (z-0.5f)/tan(beta_2) - 1.5*r0/sin(beta_2) - x;
-                } else {
-                     l = h_length-10;
-                }
-		fluid = addRect(GT_FLUID, FT_SOLID, Point(x+4*r0,  4*r0, z),
-				l, ly-8*r0);
-		n++;
-	 }
+	//GeometryID fluid;
+	//  moved upper sections
+	//}
 // activate the solid obstacle
 	//const uint NUM_OBSTACLES = 100;
 	//const double Y_DISTANCE = ly / (NUM_OBSTACLES + 1);
