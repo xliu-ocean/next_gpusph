@@ -134,7 +134,7 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
 	auto water = add_fluid( 1000.0f);
 	//add_fluid( 1000.0f);
 	set_equation_of_state(0, 7.0f, 50.f);
-	set_kinematic_visc(0, 1.0e-6);
+	set_kinematic_visc(0, 1.0e-3);
 	set_artificial_visc(0.2f);
 
 	//Wave paddle definition:  location, start & stop times, stroke and frequency (2 \pi/period)
