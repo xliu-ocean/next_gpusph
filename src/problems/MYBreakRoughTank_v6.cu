@@ -265,7 +265,7 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
                 //float l = h_length;
                 float l;
                 if (z <= 0.6f) {
-                     l = h_length + z/tan(beta) - 3*r0/sin(beta) - x;
+                     l = h_length + z/tan(beta) - 1.5*r0/sin(beta) - x;
                 //} else if (z <= 0.8f) {
                 //     l = h_length + 0.5f/tan(beta) + (z-0.5f)/tan(beta_2) - 1.5*r0/sin(beta_2) - x;
                 } else {
