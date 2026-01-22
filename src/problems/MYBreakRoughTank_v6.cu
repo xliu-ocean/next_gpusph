@@ -86,11 +86,11 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
 
 	// Allow user to set the MLS frequency at runtime. Default to 0 if density
 	// diffusion is enabled, 10 otherwise
-	const int mlsIters = get_option("mls",
-		(simparams()->densitydiffusiontype != DENSITY_DIFFUSION_NONE) ? 0 : 10);
+	//const int mlsIters = get_option("mls",
+	//	(simparams()->densitydiffusiontype != DENSITY_DIFFUSION_NONE) ? 0 : 10);
 
-	if (mlsIters > 0)
-		addFilter(MLS_FILTER, mlsIters);
+	//if (mlsIters > 0)
+	//	addFilter(MLS_FILTER, mlsIters);
 
 
 	//m_size = make_double3(lx, ly, lz);
@@ -100,7 +100,7 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
 	//	m_size.z += 2.0*height;
 	//}
 
-	//addFilter(SHEPARD_FILTER, 20); // or MLS_FILTER
+	addFilter(SHEPARD_FILTER, 20); // or MLS_FILTER
 
 	if (get_option("testpoints", false)) {
 		addPostProcess(TESTPOINTS);
