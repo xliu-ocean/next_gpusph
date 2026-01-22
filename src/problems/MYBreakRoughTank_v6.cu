@@ -115,7 +115,7 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
 	simparams()->dtadaptfactor = 0.2;
 	simparams()->buildneibsfreq = 10;
 	simparams()->tend = 20.0f; //seconds
-	simparams()->densityDiffCoeff = 1.0;
+	simparams()->densityDiffCoeff = 0.0;
 
 	//WaveGage
 	if (get_option("gages", false)) {
