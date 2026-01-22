@@ -45,7 +45,7 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
 	// Add objects to the tank
 	const bool use_cyl = get_option("cylinder", false);
 	// Density diffusion type
-	const DensityDiffusionType RHODIFF = get_option("density-diffusion", FERRARI);
+	//const DensityDiffusionType RHODIFF = get_option("density-diffusion", FERRARI);
 
 	const bool use_geometries = get_option("use-geometries", true);
 
@@ -78,7 +78,7 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
 		viscosity<ARTVISC>,
                 boundary<LJ_BOUNDARY>
 	).select_options(
-		RHODIFF,use_geometries,
+		use_geometries,
 		add_flags<ENABLE_DEM|ENABLE_PLANES>()
 //		add_flags<ENABLE_PLANES>()
 		//add_flags<ENABLE_DEM | ENABLE_PLANES>
