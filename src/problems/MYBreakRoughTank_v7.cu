@@ -28,7 +28,7 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "MYBreakRoughTank_v6.h"
+#include "MYBreakRoughTank_v7.h"
 #include "particledefine.h"
 #include "GlobalData.h"
 #include "cudasimframework.cu"
@@ -36,7 +36,7 @@
 
 #define MK_par 2
 
-MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
+MYBreakRoughTank_v7::MYBreakRoughTank_v7(GlobalData *_gdata) : Problem(_gdata)
 {
 	// use planes in general
 	const bool use_planes = get_option("use_planes", false);
@@ -158,7 +158,7 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
 	add_writer(VTKWRITER, .25);  //second argument is saving time in seconds
 
 	// Name of problem used for directory creation
-	//m_name = "MYBreakRoughTank_v6";
+	//m_name = "MYBreakRoughTank_v7";
 
 	//GeometryID dem = addDEM(dem_file);
 	//addDEM(dem_file, DEM_FMT_ASCII, use_geometries ? FT_NOFILL : FT_BORDER);
@@ -381,7 +381,7 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
 
 
 void
-MYBreakRoughTank_v6::moving_bodies_callback(const uint index, Object* object, const double t0, const double t1,
+MYBreakRoughTank_v7::moving_bodies_callback(const uint index, Object* object, const double t0, const double t1,
 			const float3& force, const float3& torque, const KinematicData& initial_kdata,
 			KinematicData& kdata, double3& dx, EulerParameters& dr)
 {
@@ -403,7 +403,7 @@ MYBreakRoughTank_v6::moving_bodies_callback(const uint index, Object* object, co
 	}
 }
 
-//void MYBreakRoughTank_v6::copy_planes(PlaneList &planes)
+//void MYBreakRoughTank_v7::copy_planes(PlaneList &planes)
 //{
 //	const double w = m_size.y;
 //	const double l = h_length + slope_length + slope2_length;

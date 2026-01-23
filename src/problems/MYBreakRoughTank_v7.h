@@ -32,7 +32,7 @@
 #include "Problem.h"
 
 
-class MYBreakRoughTank_v6: public Problem {
+class MYBreakRoughTank_v7: public Problem {
 	private:
 		bool		use_cyl, use_bottom_plane;
 		double		paddle_length;
@@ -47,7 +47,7 @@ class MYBreakRoughTank_v6: public Problem {
 		double		paddle_tstart, paddle_tend;
 
 	public:
-		MYBreakRoughTank_v6(GlobalData *);
+		MYBreakRoughTank_v7(GlobalData *);
 //		void copy_planes(PlaneList &);
 
 		void moving_bodies_callback(const uint, Object*, const double, const double, const float3&,
