@@ -313,7 +313,7 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
                 const double pcx = cos(paddle_amplitude);
                 const double pcz = sin(paddle_amplitude);
                 const double pcd = paddle_origin.x*pcx + paddle_origin.z*pcz;
-                plane = addPlane(pcx, 0, pcz, -pcd, FT_UNFILL);
+                //plane = addPlane(pcx, 0, pcz, -pcd, FT_UNFILL);
 
                 //setEraseOperation(plane, ET_ERASE_FLUID);
         }
