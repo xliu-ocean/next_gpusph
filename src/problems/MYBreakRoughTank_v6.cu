@@ -315,7 +315,7 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
                 const double pcd = paddle_origin.x*pcx + paddle_origin.z*pcz;
                 plane = addPlane(pcx, 0, pcz, -pcd, FT_UNFILL);
 
-                setEraseOperation(plane, ET_ERASE_FLUID);
+                //setEraseOperation(plane, ET_ERASE_FLUID);
         }
 	//float water_height = 0.8;
 	//addDEMFluidBox(water_height);
