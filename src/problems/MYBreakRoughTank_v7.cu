@@ -229,26 +229,26 @@ MYBreakRoughTank_v7::MYBreakRoughTank_v7(GlobalData *_gdata) : Problem(_gdata)
         //        const double wall_height = paddle_length + box_thickness + (lz - paddle_length)/3.0;
 	//	cout << "\nwall height: " << wall_height << "\n";
                 // close wall
-                GeometryID wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-                        //Point(m_origin - make_double3(0, box_thickness, box_thickness)),
-                        Point(make_double3(0,0,0) - make_double3(box_thickness+m_deltap, box_thickness+m_deltap, -water_height-m_deltap)),
-                        lx + 2*box_thickness, box_thickness, lz-water_height);
+                //GeometryID wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+                //        //Point(m_origin - make_double3(0, box_thickness, box_thickness)),
+                //        Point(make_double3(0,0,0) - make_double3(box_thickness+m_deltap, box_thickness+m_deltap, -water_height-m_deltap)),
+                //        lx + 2*box_thickness, box_thickness, lz-water_height);
 
                 // far wall
-                wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-                        //Point(m_origin + make_double3(0, ly, -box_thickness)),
-                        Point(make_double3(0,0,0) + make_double3(0, ly+m_deltap, water_height+m_deltap)),
-                        lx + 2*box_thickness, box_thickness, lz-water_height);
+                //wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+                //        //Point(m_origin + make_double3(0, ly, -box_thickness)),
+                //        Point(make_double3(0,0,0) + make_double3(0, ly+m_deltap, water_height+m_deltap)),
+                //        lx + 2*box_thickness, box_thickness, lz-water_height);
 		// end (right) wall
                 wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                         //Point(m_origin + make_double3(0, ly, -box_thickness)),
-                        Point(make_double3(0,0,0) + make_double3(h_length+slope_length+slope2_length,0, -box_thickness)),
+                        Point(make_double3(0,0,0) + make_double3(h_length+slope_length+slope2_length-m_deltap,0, -box_thickness)),
         		box_thickness, ly,  lz);
 		// left wall
-		wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-                        //Point(m_origin + make_double3(0, ly, -box_thickness)),
-                        Point(make_double3(0,0,0) + make_double3(-box_thickness-m_deltap,0, water_height+m_deltap)),
-                        box_thickness, ly,  lz-water_height);
+		//wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+                //        //Point(m_origin + make_double3(0, ly, -box_thickness)),
+                //        Point(make_double3(0,0,0) + make_double3(-box_thickness-m_deltap,0, water_height+m_deltap)),
+                //        box_thickness, ly,  lz-water_height);
         }
 	GeometryID fluid;
         float z = 0;
@@ -308,9 +308,9 @@ MYBreakRoughTank_v7::MYBreakRoughTank_v7(GlobalData *_gdata) : Problem(_gdata)
                 const double pcx = cos(paddle_amplitude);
                 const double pcz = sin(paddle_amplitude);
                 const double pcd = paddle_origin.x*pcx + paddle_origin.z*pcz;
-                plane = addPlane(pcx, 0, pcz, -pcd, FT_UNFILL);
+                //plane = addPlane(pcx, 0, pcz, -pcd, FT_UNFILL);
 
-                setEraseOperation(plane, ET_ERASE_FLUID);
+                //setEraseOperation(plane, ET_ERASE_FLUID);
         }
 	//float water_height = 0.8;
 	//addDEMFluidBox(water_height);
