@@ -47,7 +47,7 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
 	// Density diffusion type
 	//const DensityDiffusionType RHODIFF = get_option("density-diffusion", FERRARI);
 
-	const bool use_geometries = get_option("use-geometries", true);
+	const bool use_geometries = get_option("use-geometries", false);
 
 	//if (use_bottom_plane && !use_planes)
 	//	throw std::invalid_argument("cannot use bottom plane if not using planes");
