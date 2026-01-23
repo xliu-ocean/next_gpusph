@@ -274,7 +274,7 @@ MYBreakRoughTank_v6::MYBreakRoughTank_v6(GlobalData *_gdata) : Problem(_gdata)
                 }
                 //fluid = addRect(GT_FLUID, FT_SOLID, Point(x+4*r0,  4*r0, z),
                 //                l, ly-8*r0);
-		fluid = addRect(GT_FLUID, FT_SOLID, Point(x+4*r0,  2*r0, z),
+		fluid = addRect(GT_FLUID, FT_SOLID, Point(x+2*r0,  2*r0, z),
                                 l, ly-4*r0);
                 n++;
          }
