@@ -126,6 +126,7 @@ MYBreakRoughTank_v7::MYBreakRoughTank_v7(GlobalData *_gdata) : Problem(_gdata)
 	float water_height = 0.8;
 	set_gravity(-9.81f);
 	//setMaxFall(H);
+	setMaxParticleSpeed(7.0);
 
 	float r0 = m_deltap;
 
