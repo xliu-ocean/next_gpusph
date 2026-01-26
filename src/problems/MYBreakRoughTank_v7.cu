@@ -167,8 +167,9 @@ MYBreakRoughTank_v7::MYBreakRoughTank_v7(GlobalData *_gdata) : Problem(_gdata)
 
 	// Building the geometry
 	//const float br = (simparams()->boundarytype == MK_BOUNDARY ? m_deltap/MK_par : r0);
-	const int num_layers = (simparams()->boundarytype > SA_BOUNDARY) ?
-                simparams()->get_influence_layers() : 1;
+	//const int num_layers = (simparams()->boundarytype > SA_BOUNDARY) ?
+        //        simparams()->get_influence_layers() : 1;
+	const int num_layers = 5;
         const double box_thickness = (num_layers - 1)*m_deltap;
         const double3 slope_origin = make_double3(paddle_origin.x + h_length, 0, -box_thickness);
 	const double3 slope_origin_2 = make_double3(paddle_origin.x + h_length + slope_length, 0, slope_length*tan(beta)-box_thickness);
