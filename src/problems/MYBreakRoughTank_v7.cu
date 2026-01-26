@@ -70,7 +70,7 @@ MYBreakRoughTank_v7::MYBreakRoughTank_v7(GlobalData *_gdata) : Problem(_gdata)
 
 	// add DEM
 	//const string dem_file = get_option("dem", "cobble_surface_with_slope_v3.txt");
-	cconst string dem_file = get_option("dem", "obble_surface_with_slope_v4_0.1fac.txt");
+	const string dem_file = get_option("dem", "cobble_surface_with_slope_v4_0.1fac.txt");
 
 
 	SETUP_FRAMEWORK(
