@@ -231,15 +231,15 @@ MYBreakRoughTank_v7::MYBreakRoughTank_v7(GlobalData *_gdata) : Problem(_gdata)
         //        const double wall_height = paddle_length + box_thickness + (lz - paddle_length)/3.0;
 	//	cout << "\nwall height: " << wall_height << "\n";
                 // close wall
-                //GeometryID wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+                GeometryID wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                 //        //Point(m_origin - make_double3(0, box_thickness, box_thickness)),
-                //        Point(make_double3(0,0,0) - make_double3(box_thickness+m_deltap, box_thickness+m_deltap, -water_height-m_deltap)),
-                //        lx + 2*box_thickness, box_thickness, lz-water_height);
+                        Point(make_double3(0,0,0) - make_double3(box_thickness+m_deltap, box_thickness-3*m_deltap, -water_height-m_deltap)),
+                        lx + 2*box_thickness, box_thickness, lz-water_height);
 
                 // far wall
-                GeometryID wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+                wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                 //        //Point(m_origin + make_double3(0, ly, -box_thickness)),
-                        Point(make_double3(0,0,0) + make_double3(0, ly-4*m_deltap, -m_deltap)),
+                        Point(make_double3(0,0,0) + make_double3(0, ly-3*m_deltap, -m_deltap)),
                         lx + 2*box_thickness, box_thickness, lz);
 		// end (right) wall
                 //GeometryID wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
