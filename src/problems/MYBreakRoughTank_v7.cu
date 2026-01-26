@@ -169,7 +169,7 @@ MYBreakRoughTank_v7::MYBreakRoughTank_v7(GlobalData *_gdata) : Problem(_gdata)
 	//const float br = (simparams()->boundarytype == MK_BOUNDARY ? m_deltap/MK_par : r0);
 	//const int num_layers = (simparams()->boundarytype > SA_BOUNDARY) ?
         //        simparams()->get_influence_layers() : 1;
-	const int num_layers = 5;
+	num_layers = 5;
         const double box_thickness = (num_layers - 1)*m_deltap;
         const double3 slope_origin = make_double3(paddle_origin.x + h_length, 0, -box_thickness);
 	const double3 slope_origin_2 = make_double3(paddle_origin.x + h_length + slope_length, 0, slope_length*tan(beta)-box_thickness);
@@ -270,14 +270,14 @@ MYBreakRoughTank_v7::MYBreakRoughTank_v7(GlobalData *_gdata) : Problem(_gdata)
                 //float l = h_length;
                 float l;
                 if (z <= 0.6f) {
-                     l = h_length + z/tan(beta) - 3*r0/sin(beta) - x;
+                     l = h_length + z/tan(beta) - 5*r0/sin(beta) - x;
                 //} else if (z <= 0.8f) {
                 //     l = h_length + 0.5f/tan(beta) + (z-0.5f)/tan(beta_2) - 1.5*r0/sin(beta_2) - x;
                 } else {
                      l = h_length-10;
                 }
-                fluid = addRect(GT_FLUID, FT_SOLID, Point(x+4*r0,  4*r0, z),
-                                l, ly-8*r0);
+                fluid = addRect(GT_FLUID, FT_SOLID, Point(x+6*r0,  6*r0, z),
+                                l, ly-12*r0);
                 n++;
          }
 	// these planes are used at least for cutting, so they are always defined
