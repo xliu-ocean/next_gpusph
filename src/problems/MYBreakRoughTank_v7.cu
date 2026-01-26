@@ -239,7 +239,7 @@ MYBreakRoughTank_v7::MYBreakRoughTank_v7(GlobalData *_gdata) : Problem(_gdata)
                 // far wall
                 GeometryID wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                 //        //Point(m_origin + make_double3(0, ly, -box_thickness)),
-                        Point(make_double3(0,0,0) + make_double3(0, ly-m_deltap, -m_deltap)),
+                        Point(make_double3(0,0,0) + make_double3(0, ly+3*m_deltap, -m_deltap)),
                         lx + 2*box_thickness, box_thickness, lz);
 		// end (right) wall
                 //GeometryID wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
