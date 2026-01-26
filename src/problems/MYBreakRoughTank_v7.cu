@@ -237,10 +237,10 @@ MYBreakRoughTank_v7::MYBreakRoughTank_v7(GlobalData *_gdata) : Problem(_gdata)
                 //        lx + 2*box_thickness, box_thickness, lz-water_height);
 
                 // far wall
-                //wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+                wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                 //        //Point(m_origin + make_double3(0, ly, -box_thickness)),
-                //        Point(make_double3(0,0,0) + make_double3(0, ly+m_deltap, water_height+m_deltap)),
-                //        lx + 2*box_thickness, box_thickness, lz-water_height);
+                        Point(make_double3(0,0,0) + make_double3(0, ly-m_deltap, -m_deltap)),
+                        lx + 2*box_thickness, box_thickness, lz);
 		// end (right) wall
                 //GeometryID wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                 //        //Point(m_origin + make_double3(0, ly, -box_thickness)),
