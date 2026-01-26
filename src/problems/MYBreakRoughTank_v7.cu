@@ -45,7 +45,7 @@ MYBreakRoughTank_v7::MYBreakRoughTank_v7(GlobalData *_gdata) : Problem(_gdata)
 	// Add objects to the tank
 	const bool use_cyl = get_option("cylinder", false);
 	// Density diffusion type
-	const DensityDiffusionType RHODIFF = get_option("density-diffusion", FERRARI);
+	const DensityDiffusionType RHODIFF = get_option("density-diffusion", DELTA_SPH);
 
 	const bool use_geometries = get_option("use-geometries", true);
 
@@ -126,7 +126,7 @@ MYBreakRoughTank_v7::MYBreakRoughTank_v7(GlobalData *_gdata) : Problem(_gdata)
 	float water_height = 0.8;
 	set_gravity(-9.81f);
 	//setMaxFall(H);
-	setMaxParticleSpeed(7.0);
+	//setMaxParticleSpeed(7.0);
 
 	float r0 = m_deltap;
 
