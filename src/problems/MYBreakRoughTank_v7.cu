@@ -69,8 +69,8 @@ MYBreakRoughTank_v7::MYBreakRoughTank_v7(GlobalData *_gdata) : Problem(_gdata)
         beta_2 = 11.30993*M_PI/180.0; //b1/eta for run-up slope
 
 	// add DEM
-	//const string dem_file = get_option("dem", "cobble_surface_with_slope_v3.txt");
-	const string dem_file = get_option("dem", "cobble_surface_with_slope_v4_0.3fac.txt");
+	const string dem_file = get_option("dem", "cobble_surface_with_slope_v3.txt");
+	//const string dem_file = get_option("dem", "cobble_surface_with_slope_v4_0.3fac.txt");
 
 
 	SETUP_FRAMEWORK(
@@ -123,7 +123,7 @@ MYBreakRoughTank_v7::MYBreakRoughTank_v7(GlobalData *_gdata) : Problem(_gdata)
 	}
 
 	// Physical parameters
-	H = 2.3;
+	H = 1.8;
 	float water_height = 0.8;
 	set_gravity(-9.81f);
 	//setMaxFall(H);
