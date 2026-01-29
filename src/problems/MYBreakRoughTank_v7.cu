@@ -278,7 +278,7 @@ MYBreakRoughTank_v7::MYBreakRoughTank_v7(GlobalData *_gdata) : Problem(_gdata)
                      l = h_length-10;
                 }
                 fluid = addRect(GT_FLUID, FT_SOLID, Point(x+6*r0,  6*r0, z),
-                                l, ly-12*r0);
+                                l, ly-11*r0);
                 n++;
          }
 	// these planes are used at least for cutting, so they are always defined
