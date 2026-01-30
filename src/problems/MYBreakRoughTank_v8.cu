@@ -69,8 +69,8 @@ MYBreakRoughTank_v8::MYBreakRoughTank_v8(GlobalData *_gdata) : Problem(_gdata)
         beta_2 = 11.30993*M_PI/180.0; //b1/eta for run-up slope
 
 	// add DEM
-	//const string dem_file = get_option("dem", "cobble_surface_with_slope_v3.txt");
-	const string dem_file = get_option("dem", "cobble_surface_with_slope_v4_0.1fac.txt");
+	const string dem_file = get_option("dem", "cobble_surface_with_slope_v3.txt");
+	//const string dem_file = get_option("dem", "cobble_surface_with_slope_v4_0.1fac.txt");
 
 
 	SETUP_FRAMEWORK(
@@ -109,7 +109,7 @@ MYBreakRoughTank_v8::MYBreakRoughTank_v8(GlobalData *_gdata) : Problem(_gdata)
 	//use_bottom_plane = 1;  //1 for plane; 0 for particles
 
 	// SPH parameters
-	set_deltap(0.03f);  //0.005f;
+	set_deltap(0.015f);  //0.005f;
 	//set_timestep(0.0001);
 	simparams()->dtadaptfactor = 0.2;
 	simparams()->buildneibsfreq = 10;
@@ -123,7 +123,7 @@ MYBreakRoughTank_v8::MYBreakRoughTank_v8(GlobalData *_gdata) : Problem(_gdata)
 	}
 
 	// Physical parameters
-	H = 2.3;
+	H = 2.0;
 	float water_height = 0.8;
 	set_gravity(-9.81f);
 	//setMaxFall(H);
