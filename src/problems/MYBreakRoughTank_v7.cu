@@ -123,7 +123,7 @@ MYBreakRoughTank_v7::MYBreakRoughTank_v7(GlobalData *_gdata) : Problem(_gdata)
 	}
 
 	// Physical parameters
-	H = 1.8;
+	H = 2.0;
 	float water_height = 0.8;
 	set_gravity(-9.81f);
 	//setMaxFall(H);
