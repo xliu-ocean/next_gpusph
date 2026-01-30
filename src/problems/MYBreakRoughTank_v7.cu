@@ -74,7 +74,9 @@ MYBreakRoughTank_v7::MYBreakRoughTank_v7(GlobalData *_gdata) : Problem(_gdata)
 
 
 	SETUP_FRAMEWORK(
-		viscosity<SPSVISC>,
+                rheology<NEWTONIAN>,
+                turbulence_model<ARTIFICIAL>,
+	//	viscosity<SPSVISC>,
 		boundary<DUMMY_BOUNDARY>
 	).select_options(
 		RHODIFF,use_geometries,
