@@ -146,18 +146,17 @@ MYBreakRoughTank_v9::MYBreakRoughTank_v9(GlobalData *_gdata) : Problem(_gdata)
 	paddle_length = 2.3f;
 	//paddle_width = m_size.y - 2*r0;
 	paddle_width = ly -.2*r0;
-	//paddle_tstart=0.5f;
-	paddle_tstart=300.0f;
+	paddle_tstart=0.5f;
 	paddle_origin = make_double3(0.25f, r0, 0.0f);
-	//paddle_tend = 30.0f;//seconds
-	paddle_tend = 330.0f;
+	paddle_tend = 20.0f;
 	// The stroke value is given at free surface level H
 	float stroke = 0.2;
 	// m_mbamplitude is the maximal angular value for paddle angle
 	// Paddle angle is in [-m_mbamplitude, m_mbamplitude]
-	paddle_amplitude = atan(stroke/(2.0*(H - paddle_origin.z)));
+	//paddle_amplitude = atan(stroke/(2.0*(H - paddle_origin.z)));
+	paddle_amplitude = 0.285;
 	cout << "\npaddle_amplitude (radians): " << paddle_amplitude << "\n";
-	paddle_omega = 2.0*M_PI/0.8;		// period T = 0.8 s
+	paddle_omega = 2.0*M_PI/5.0f;		// period T = 0.8 s
 
 	// Drawing and saving times
 
@@ -401,17 +400,20 @@ MYBreakRoughTank_v9::moving_bodies_callback(const uint index, Object* object, co
     dx= make_double3(0.0);
     kdata.lvel=make_double3(0.0f, 0.0f, 0.0f);
     if (t1> paddle_tstart && t1 < paddle_tend){
-       kdata.avel = make_double3(0.0, paddle_amplitude*paddle_omega*sin(paddle_omega*(t1-paddle_tstart)),0.0);
-       EulerParameters dqdt = 0.5*EulerParameters(kdata.avel)*kdata.orientation;
-       dr = EulerParameters::Identity() + (t1-t0)*dqdt*kdata.orientation.Inverse();
-       dr.Normalize();
-	   kdata.orientation = kdata.orientation + (t1 - t0)*dqdt;
-	   kdata.orientation.Normalize();
+       //kdata.avel = make_double3(0.0, paddle_amplitude*paddle_omega*sin(paddle_omega*(t1-paddle_tstart)),0.0);
+	kdata.lvel.x = paddle_amplitude**2*M_PI*sin(2*M_PI*(t1-paddle_tstart)/paddle_period);
+       //EulerParameters dqdt = 0.5*EulerParameters(kdata.avel)*kdata.orientation;
+       //dr = EulerParameters::Identity() + (t1-t0)*dqdt*kdata.orientation.Inverse();
+       //dr.Normalize();
+	//   kdata.orientation = kdata.orientation + (t1 - t0)*dqdt;
+	//   kdata.orientation.Normalize();
+	dx.x = (t1 - t0) * kdata.lvel.x;
 	   }
 	else {
-	   kdata.avel = make_double3(0.0,0.0,0.0);
-	   kdata.orientation = kdata.orientation;
-	   dr.Identity();
+	   //kdata.avel = make_double3(0.0,0.0,0.0);
+	   //kdata.orientation = kdata.orientation;
+	   //dr.Identity();
+	   dx.x = 0;
 	}
 }
 
