@@ -55,14 +55,14 @@ MYBreakRoughTank_v9::MYBreakRoughTank_v9(GlobalData *_gdata) : Problem(_gdata)
 	// Size and origin of the simulation domain
 	lx = 82.5;
 	ly = 2.0;
-	lz = 3.5;
+	lz = 4.0;
 
 	// Data for problem setup
-	slope_length = 36.0;
+	slope_length = 56.0;
 	slope2_length = 10.0;
-	h_length = 35.5;
+	h_length = 15.5;
 	//height = .63;
-	height = 3.3;
+	height = 3.8;
 	//beta = 4.2364*M_PI/180.0;
 	//beta = 2.86241*M_PI/180.0;  // bed slope = atan(height/slope_length).
 	beta = 1.432*M_PI/180.0;
@@ -72,7 +72,7 @@ MYBreakRoughTank_v9::MYBreakRoughTank_v9(GlobalData *_gdata) : Problem(_gdata)
 	//const string dem_file = get_option("dem", "cobble_surface_with_slope_v3.txt");
 	//const string dem_file = get_option("dem", "cobble_surface_with_slope_v6_res001_2.0fac.txt");
 	//const string dem_file = get_option("dem", "cobble_surface_with_slope_v4_0.3fac.txt");
-	const string dem_file = get_option("dem", "cobble_surface_with_slope_v7_res001_sec8_fac0.1.txt");
+	const string dem_file = get_option("dem", "cobble_surface_with_slope_v9_res001_sec8_fac1.0.txt");
 
 
 	SETUP_FRAMEWORK(
@@ -127,7 +127,7 @@ MYBreakRoughTank_v9::MYBreakRoughTank_v9(GlobalData *_gdata) : Problem(_gdata)
 	}
 
 	// Physical parameters
-	H = 2.0;
+	H = 0.92;
 	float water_height = 0.8;
 	set_gravity(-9.81f);
 	//setMaxFall(H);
@@ -161,7 +161,7 @@ MYBreakRoughTank_v9::MYBreakRoughTank_v9(GlobalData *_gdata) : Problem(_gdata)
 
 	// Drawing and saving times
 
-	add_writer(VTKWRITER, .05);  //second argument is saving time in seconds
+	add_writer(VTKWRITER, .25);  //second argument is saving time in seconds
 
 	// Name of problem used for directory creation
 	//m_name = "MYBreakRoughTank_v9";
@@ -274,13 +274,13 @@ MYBreakRoughTank_v9::MYBreakRoughTank_v9(GlobalData *_gdata) : Problem(_gdata)
                 //float l = h_length + z/tan(beta) - 1.5*r0/sin(beta) - x;
                 //float l = h_length;
                 float l;
-                if (z <= 0.6f) {
+                //if (z <= 0.6f) {
                      l = h_length + z/tan(beta) - 5*r0/sin(beta) - x;
                 //} else if (z <= 0.8f) {
                 //     l = h_length + 0.5f/tan(beta) + (z-0.5f)/tan(beta_2) - 1.5*r0/sin(beta_2) - x;
-                } else {
-                     l = h_length-10;
-                }
+                //} else {
+                //     l = h_length-10;
+                //}
                 fluid = addRect(GT_FLUID, FT_SOLID, Point(x+6*r0,  6*r0, z),
                                 l, ly-11*r0);
                 n++;
