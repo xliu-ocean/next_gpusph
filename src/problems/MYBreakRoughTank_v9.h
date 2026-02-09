@@ -42,7 +42,7 @@ class MYBreakRoughTank_v9: public Problem {
 		double		lx, ly, lz;		// dimension of experiment box
 
 		// Moving boundary data
-		double		paddle_amplitude, paddle_omega;
+		double		paddle_amplitude, paddle_omega, paddle_period;
 		double3		paddle_origin;
 		double		paddle_tstart, paddle_tend;
 
