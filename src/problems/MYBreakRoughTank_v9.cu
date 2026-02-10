@@ -145,7 +145,7 @@ MYBreakRoughTank_v9::MYBreakRoughTank_v9(GlobalData *_gdata) : Problem(_gdata)
 	//paddle_length = .7f;
 	paddle_length = 2.3f;
 	//paddle_width = m_size.y - 2*r0;
-	paddle_width = ly - 11*r0;
+	paddle_width = ly - 10*r0;
 	paddle_tstart=0.5f;
 	paddle_origin = make_double3(5*r0, 6*r0, 5*r0);
 	paddle_tend = 20.0f;
