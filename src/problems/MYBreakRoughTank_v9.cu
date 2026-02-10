@@ -145,9 +145,9 @@ MYBreakRoughTank_v9::MYBreakRoughTank_v9(GlobalData *_gdata) : Problem(_gdata)
 	//paddle_length = .7f;
 	paddle_length = 2.3f;
 	//paddle_width = m_size.y - 2*r0;
-	paddle_width = ly -.2*r0;
+	paddle_width = ly - 11*r0;
 	paddle_tstart=0.5f;
-	paddle_origin = make_double3(0.25f, r0, 0.0f);
+	paddle_origin = make_double3(5*r0, 6*r0, 5*r0);
 	paddle_tend = 20.0f;
 	// The stroke value is given at free surface level H
 	float stroke = 0.2;
@@ -187,9 +187,9 @@ MYBreakRoughTank_v9::MYBreakRoughTank_v9(GlobalData *_gdata) : Problem(_gdata)
 	//disableCollisions(experiment_box);
 
 	const float amplitude = -paddle_amplitude ;
-	//GeometryID paddle = addBox(GT_MOVING_BODY, FT_BORDER,
-	//	Point(paddle_origin- make_double3(box_thickness, 0, 0)),
-	//	box_thickness, paddle_width, paddle_length);
+	GeometryID paddle = addBox(GT_MOVING_BODY, FT_BORDER,
+		Point(paddle_origin- make_double3(box_thickness, 0, 0)),
+		box_thickness, paddle_width, paddle_length);
 	//rotate(paddle, 0,-amplitude, 0);
 	//rotate(paddle, 0, 0, 0);
 	//disableCollisions(paddle);
@@ -397,7 +397,6 @@ MYBreakRoughTank_v9::moving_bodies_callback(const uint index, Object* object, co
 			const float3& force, const float3& torque, const KinematicData& initial_kdata,
 			KinematicData& kdata, double3& dx, EulerParameters& dr)
 {
-
     dx= make_double3(0.0);
     kdata.lvel=make_double3(0.0f, 0.0f, 0.0f);
     cout << "\nmove.lvel.x: " << t1 << "\n";
