@@ -156,8 +156,8 @@ MYBreakRoughTank_v9::MYBreakRoughTank_v9(GlobalData *_gdata) : Problem(_gdata)
 	//paddle_amplitude = atan(stroke/(2.0*(H - paddle_origin.z)));
 	paddle_amplitude = 0.285;
 	cout << "\npaddle_amplitude (radians): " << paddle_amplitude << "\n";
-	paddle_omega = 2.0*M_PI/10.0f;		// period T = 0.8 s
-	paddle_period = 10.0f;
+	paddle_omega = 2.0*M_PI/5.0f;		// period T = 0.8 s
+	paddle_period = 5.0f;
 
 	// Drawing and saving times
 
