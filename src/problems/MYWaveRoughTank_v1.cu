@@ -156,8 +156,8 @@ MYWaveRoughTank_v1::MYWaveRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
 	//paddle_amplitude = atan(stroke/(2.0*(H - paddle_origin.z)));
 	paddle_amplitude = 0.4;
 	cout << "\npaddle_amplitude (radians): " << paddle_amplitude << "\n";
-	paddle_omega = 2.0*M_PI/5.0f;		// period T = 0.8 s
-	paddle_period = 5.0f;
+	paddle_omega = 2.0*M_PI/10.0f;		// period T = 0.8 s
+	paddle_period = 10.0f;
 
 	// Drawing and saving times
 
@@ -402,7 +402,38 @@ MYWaveRoughTank_v1::moving_bodies_callback(const uint index, Object* object, con
     cout << "\nmove.lvel.x: " << t1 << "\n";
     if (t1> paddle_tstart && t1 < paddle_tend){
        //kdata.avel = make_double3(0.0, paddle_amplitude*paddle_omega*sin(paddle_omega*(t1-paddle_tstart)),0.0);
-	kdata.lvel = make_double3(paddle_amplitude*2.0*M_PI*sin(2.0*M_PI*(t1-paddle_tstart)/paddle_period),0,0);
+	//kdata.lvel = make_double3(paddle_amplitude*2.0*M_PI*sin(2.0*M_PI*(t1-paddle_tstart)/paddle_period),0,0);
+	float lvel(float t1)
+	{
+    	    float wt = omega * (t1-paddle_tstart);
+	    float v = 0.0f;
+	    a1 = -3.807040403e-16;
+            b1 = 1.833777260e+00;
+            a2 = -2.667460375e-01;
+            b2 = -1.109393431e-16;
+            a3 = -8.104411239e-17;
+            b3 = -5.084284076e-02;
+            a4 = 1.080287072e-02;
+            b4 = 3.555081983e-17;
+            a5 = -4.452772794e-18;
+            b5 = 2.479574682e-03;
+            a6 = -6.217843014e-04;
+            b6 = 1.429394875e-17;
+            a7 = 5.104491855e-17;
+            b7 = -1.709078608e-04;
+            a8 = 4.979581269e-05;
+            b8 = -2.549119733e-18;
+	    v += H * (1*paddle_omega) * (-a1*sinf(1*wt) + b1*cosf(1*wt));
+	    v += H * (2*paddle_omega) * (-a2*sinf(2*wt) + b2*cosf(2*wt));
+	    v += H * (3*paddle_omega) * (-a3*sinf(3*wt) + b3*cosf(3*wt));
+	    v += H * (4*paddle_omega) * (-a4*sinf(4*wt) + b4*cosf(4*wt));
+            v += H * (5*paddle_omega) * (-a5*sinf(5*wt) + b5*cosf(5*wt));
+            v += H * (6*paddle_omega) * (-a6*sinf(6*wt) + b6*cosf(6*wt));
+            v += H * (7*paddle_omega) * (-a7*sinf(7*wt) + b7*cosf(7*wt));
+            v += H * (8*paddle_omega) * (-a8*sinf(8*wt) + b8*cosf(8*wt));
+	    return v;
+	}
+	kdata.lvel = lvel;
        //EulerParameters dqdt = 0.5*EulerParameters(kdata.avel)*kdata.orientation;
        //dr = EulerParameters::Identity() + (t1-t0)*dqdt*kdata.orientation.Inverse();
        //dr.Normalize();
