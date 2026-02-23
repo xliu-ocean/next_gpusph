@@ -150,7 +150,7 @@ MYWaveRoughTank_v1::MYWaveRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
 	paddle_origin = make_double3(5*r0, 6*r0, 4*r0);
 	paddle_tend = 20.0f;
 	// The stroke value is given at free surface level H
-	float stroke = 0.2;
+	// float stroke = 0.2;
 	// m_mbamplitude is the maximal angular value for paddle angle
 	// Paddle angle is in [-m_mbamplitude, m_mbamplitude]
 	//paddle_amplitude = atan(stroke/(2.0*(H - paddle_origin.z)));
@@ -403,37 +403,34 @@ MYWaveRoughTank_v1::moving_bodies_callback(const uint index, Object* object, con
     if (t1> paddle_tstart && t1 < paddle_tend){
        //kdata.avel = make_double3(0.0, paddle_amplitude*paddle_omega*sin(paddle_omega*(t1-paddle_tstart)),0.0);
 	//kdata.lvel = make_double3(paddle_amplitude*2.0*M_PI*sin(2.0*M_PI*(t1-paddle_tstart)/paddle_period),0,0);
-	float lvel(float t1)
-	{
-    	    float wt = omega * (t1-paddle_tstart);
-	    float v = 0.0f;
-	    float a1 = -3.807040403e-16;
-            float b1 = 1.833777260e+00;
-            float a2 = -2.667460375e-01;
-            float b2 = -1.109393431e-16;
-            float a3 = -8.104411239e-17;
-            float b3 = -5.084284076e-02;
-            float a4 = 1.080287072e-02;
-            float b4 = 3.555081983e-17;
-            float a5 = -4.452772794e-18;
-            float b5 = 2.479574682e-03;
-            float a6 = -6.217843014e-04;
-            float b6 = 1.429394875e-17;
-            float a7 = 5.104491855e-17;
-            float b7 = -1.709078608e-04;
-            float a8 = 4.979581269e-05;
-            float b8 = -2.549119733e-18;
-	    v += H * (1*paddle_omega) * (-a1*sinf(1*wt) + b1*cosf(1*wt));
-	    v += H * (2*paddle_omega) * (-a2*sinf(2*wt) + b2*cosf(2*wt));
-	    v += H * (3*paddle_omega) * (-a3*sinf(3*wt) + b3*cosf(3*wt));
-	    v += H * (4*paddle_omega) * (-a4*sinf(4*wt) + b4*cosf(4*wt));
-            v += H * (5*paddle_omega) * (-a5*sinf(5*wt) + b5*cosf(5*wt));
-            v += H * (6*paddle_omega) * (-a6*sinf(6*wt) + b6*cosf(6*wt));
-            v += H * (7*paddle_omega) * (-a7*sinf(7*wt) + b7*cosf(7*wt));
-            v += H * (8*paddle_omega) * (-a8*sinf(8*wt) + b8*cosf(8*wt));
-	    return v;
-	}
-	kdata.lvel = lvel;
+	float lvel0=0;
+	float paddle_shift=7.5; //seconds
+    	float wt = paddle_omega * (t1-paddle_tstart+paddle_shift);
+	float a1 = -3.807040403e-16;
+        float b1 = 1.833777260e+00;
+        float a2 = -2.667460375e-01;
+        float b2 = -1.109393431e-16;
+        float a3 = -8.104411239e-17;
+        float b3 = -5.084284076e-02;
+        float a4 = 1.080287072e-02;
+        float b4 = 3.555081983e-17;
+        float a5 = -4.452772794e-18;
+        float b5 = 2.479574682e-03;
+        float a6 = -6.217843014e-04;
+        float b6 = 1.429394875e-17;
+        float a7 = 5.104491855e-17;
+        float b7 = -1.709078608e-04;
+        float a8 = 4.979581269e-05;
+        float b8 = -2.549119733e-18;
+	lvel0 += paddle_amplitude * (1*paddle_omega) * (-a1*sinf(1*wt) + b1*cosf(1*wt));
+	lvel0 += paddle_amplitude * (2*paddle_omega) * (-a2*sinf(2*wt) + b2*cosf(2*wt));
+	lvel0 += paddle_amplitude * (3*paddle_omega) * (-a3*sinf(3*wt) + b3*cosf(3*wt));
+	lvel0 += paddle_amplitude * (4*paddle_omega) * (-a4*sinf(4*wt) + b4*cosf(4*wt));
+        lvel0 += paddle_amplitude * (5*paddle_omega) * (-a5*sinf(5*wt) + b5*cosf(5*wt));
+        lvel0 += paddle_amplitude * (6*paddle_omega) * (-a6*sinf(6*wt) + b6*cosf(6*wt));
+        lvel0 += paddle_amplitude * (7*paddle_omega) * (-a7*sinf(7*wt) + b7*cosf(7*wt));
+        lvel0 += paddle_amplitude * (8*paddle_omega) * (-a8*sinf(8*wt) + b8*cosf(8*wt));
+	kdata.lvel = make_double3(lvel0, 0, 0);
        //EulerParameters dqdt = 0.5*EulerParameters(kdata.avel)*kdata.orientation;
        //dr = EulerParameters::Identity() + (t1-t0)*dqdt*kdata.orientation.Inverse();
        //dr.Normalize();
