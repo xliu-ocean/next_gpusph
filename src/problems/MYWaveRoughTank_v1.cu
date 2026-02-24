@@ -154,7 +154,7 @@ MYWaveRoughTank_v1::MYWaveRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
 	// m_mbamplitude is the maximal angular value for paddle angle
 	// Paddle angle is in [-m_mbamplitude, m_mbamplitude]
 	//paddle_amplitude = atan(stroke/(2.0*(H - paddle_origin.z)));
-	paddle_amplitude = 0.4;
+	paddle_amplitude = 2;
 	cout << "\npaddle_amplitude (radians): " << paddle_amplitude << "\n";
 	paddle_omega = 2.0*M_PI/10.0f;		// period T = 0.8 s
 	paddle_period = 10.0f;
