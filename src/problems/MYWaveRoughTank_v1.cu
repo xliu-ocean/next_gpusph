@@ -53,13 +53,13 @@ MYWaveRoughTank_v1::MYWaveRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
 	//	throw std::invalid_argument("cannot use bottom plane if not using planes");
 
 	// Size and origin of the simulation domain
-	lx = 82.5;
+	lx = 86.5;
 	ly = 2.0;
-	lz = 4.0;
+	lz = 4.5;
 
 	// Data for problem setup
 	slope_length = 56.0;
-	slope2_length = 10.0;
+	slope2_length = 15.0;
 	h_length = 15.5;
 	//height = .63;
 	height = 3.8;
@@ -72,7 +72,7 @@ MYWaveRoughTank_v1::MYWaveRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
 	//const string dem_file = get_option("dem", "cobble_surface_with_slope_v3.txt");
 	//const string dem_file = get_option("dem", "cobble_surface_with_slope_v6_res001_2.0fac.txt");
 	//const string dem_file = get_option("dem", "cobble_surface_with_slope_v4_0.3fac.txt");
-	const string dem_file = get_option("dem", "cobble_surface_with_slope_v9_res001_sec8_fac1.0.txt");
+	const string dem_file = get_option("dem", "preprocessing/cobble_slope_design/cobble_surface_with_slope_wave_v1_fac1.0.txt");
 
 
 	SETUP_FRAMEWORK(
@@ -117,7 +117,7 @@ MYWaveRoughTank_v1::MYWaveRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
 	//set_timestep(0.0001);
 	simparams()->dtadaptfactor = 0.2;
 	simparams()->buildneibsfreq = 10;
-	simparams()->tend = 20.0f; //seconds
+	simparams()->tend = 30.0f; //seconds
 	simparams()->densityDiffCoeff = 1.0;
 
 	//WaveGage
@@ -143,12 +143,12 @@ MYWaveRoughTank_v1::MYWaveRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
 
 	//Wave paddle definition:  location, start & stop times, stroke and frequency (2 \pi/period)
 	//paddle_length = .7f;
-	paddle_length = 2.3f;
+	paddle_length = 4.3f;
 	//paddle_width = m_size.y - 2*r0;
 	paddle_width = ly - 10*r0;
 	paddle_tstart=0.5f;
 	paddle_origin = make_double3(5*r0, 6*r0, 4*r0);
-	paddle_tend = 20.0f;
+	paddle_tend = 30.0f;
 	// The stroke value is given at free surface level H
 	// float stroke = 0.2;
 	// m_mbamplitude is the maximal angular value for paddle angle
