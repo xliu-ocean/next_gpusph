@@ -257,10 +257,10 @@ MYWaveRoughTank_v1::MYWaveRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
                 //        Point(make_double3(0,0,0) + make_double3(-box_thickness-m_deltap,0, water_height+m_deltap)),
                 //        box_thickness, ly,  lz-water_height);
 		//top cover
-		//wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-                //        //Point(m_origin + make_double3(0, ly, -box_thickness)),
-                //        Point(make_double3(0,0,0) + make_double3(-box_thickness, -m_deltap, 2.85)),
-                //        lx + 2*box_thickness, ly + 2*m_deltap, box_thickness);
+		wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+                        //Point(m_origin + make_double3(0, ly, -box_thickness)),
+                        Point(make_double3(0,0,0) + make_double3(-box_thickness, -m_deltap, lz)),
+                        lx + 2*box_thickness, ly + 2*m_deltap, box_thickness);
         }
 	GeometryID fluid;
         float z = 0;
