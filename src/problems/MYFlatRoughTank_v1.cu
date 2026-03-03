@@ -144,7 +144,7 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
 	//paddle_width = m_size.y - 2*r0;
 	paddle_width = ly - 10*r0;
 	paddle_tstart=0.5f;
-	paddle_origin = make_double3(5*r0, 6*r0, 4*r0);
+	paddle_origin = make_double3(5*r0, 6*r0, 4*r0+1e-8);
 	paddle_tend = 30.0f;
 	// The stroke value is given at free surface level H
 	// float stroke = 0.2;
