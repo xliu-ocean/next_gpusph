@@ -275,9 +275,9 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
                 //float l = h_length;
                 float l;
                 //if (z <= 0.6f) {
-                     l = h_length + z/tan(beta) - 5*r0/sin(beta) - x;
+                //     l = h_length + z/tan(beta) - 5*r0/sin(beta) - x;
                 //} else if (z <= 0.8f) {
-                //     l = h_length + 0.5f/tan(beta) + (z-0.5f)/tan(beta_2) - 1.5*r0/sin(beta_2) - x;
+                     l = h_length + slope_length + z/tan(beta_2) - 5*r0/sin(beta_2) - x;
                 //} else {
                 //     l = h_length-10;
                 //}
@@ -297,11 +297,11 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
                 setEraseOperation(plane, ET_ERASE_FLUID);
 
                 // this plane cuts the lateral walls below the sloping ground
-                plane = addPlane(-sin(beta), 0, cos(beta),
-                        slope_origin.x*sin(beta) + 2*(m_deltap + box_thickness*cos(beta)),
-                        FT_UNFILL);
+                //plane = addPlane(-sin(beta), 0, cos(beta),
+                //        slope_origin.x*sin(beta) + 2*(m_deltap + box_thickness*cos(beta)),
+                //        FT_UNFILL);
 
-                setEraseOperation(plane, ET_ERASE_BOUNDARY);
+                //setEraseOperation(plane, ET_ERASE_BOUNDARY);
 
 		plane = addPlane(-sin(beta_2), 0, cos(beta_2), slope_origin_2.x*sin(beta_2),
                         use_bottom_plane ? FT_NOFILL : FT_UNFILL);
@@ -309,11 +309,11 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
                 setEraseOperation(plane, ET_ERASE_FLUID);
 
                 // this plane cuts the lateral walls below the sloping ground
-                plane = addPlane(-sin(beta_2), 0, cos(beta_2),
-                        slope_origin_2.x*sin(beta_2) - slope_length*sin(beta) + 2*(m_deltap + box_thickness*cos(beta_2)),
-                        FT_UNFILL);
+                //plane = addPlane(-sin(beta_2), 0, cos(beta_2),
+                //        slope_origin_2.x*sin(beta_2) - slope_length*sin(beta) + 2*(m_deltap + box_thickness*cos(beta_2)),
+                //        FT_UNFILL);
 
-                setEraseOperation(plane, ET_ERASE_BOUNDARY);
+                //setEraseOperation(plane, ET_ERASE_BOUNDARY);
 
                 // this plane corresponds to the initial paddle position, and is only used to cut out
                 // the fluid behind the paddle. it will not be an actual geometry
