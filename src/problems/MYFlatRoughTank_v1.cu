@@ -69,10 +69,7 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
         beta_2 = 11.30993*M_PI/180.0; //b1/eta for run-up slope
 
 	// add DEM
-	//const string dem_file = get_option("dem", "cobble_surface_with_slope_v3.txt");
-	//const string dem_file = get_option("dem", "cobble_surface_with_slope_v6_res001_2.0fac.txt");
-	//const string dem_file = get_option("dem", "cobble_surface_with_slope_v4_0.3fac.txt");
-	const string dem_file = get_option("dem", "preprocessing/cobble_slope_design/cobble_surface_with_slope_wave_v1_fac0.8.txt");
+	const string dem_file = get_option("dem", "preprocessing/flat_bottom/cobble_surface_with_flat_sand_v1_fac1.0.txt");
 
 
 	SETUP_FRAMEWORK(
