@@ -274,7 +274,7 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
                 //if (z <= 0.6f) {
                 //     l = h_length + z/tan(beta) - 5*r0/sin(beta) - x;
                 //} else if (z <= 0.8f) {
-                     l = h_length + slope_length + z/tan(beta_2) - 5*r0/sin(beta_2) - x;
+                     l = h_length + slope_length + z/tan(beta_2) - 7*r0/sin(beta_2) - x;
                 //} else {
                 //     l = h_length-10;
                 //}
