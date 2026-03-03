@@ -288,10 +288,10 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
                 // an actual geometry; if !use_bottom_plane, it will only be used
                 // to unfill the fluid (since the sloping box would not be sufficient
                 // to remove all of the fluid below)
-                GeometryID plane = addPlane(-sin(beta), 0, cos(beta), slope_origin.x*sin(beta),
-                        use_bottom_plane ? FT_NOFILL : FT_UNFILL);
+                //GeometryID plane = addPlane(-sin(beta), 0, cos(beta), slope_origin.x*sin(beta),
+                //        use_bottom_plane ? FT_NOFILL : FT_UNFILL);
 
-                setEraseOperation(plane, ET_ERASE_FLUID);
+                //setEraseOperation(plane, ET_ERASE_FLUID);
 
                 // this plane cuts the lateral walls below the sloping ground
                 //plane = addPlane(-sin(beta), 0, cos(beta),
@@ -300,17 +300,20 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
 
                 //setEraseOperation(plane, ET_ERASE_BOUNDARY);
 
-		plane = addPlane(-sin(beta_2), 0, cos(beta_2), slope_origin_2.x*sin(beta_2),
+		GeometryID plane = addPlane(-sin(beta_2), 0, cos(beta_2), slope_origin_2.x*sin(beta_2),
                         use_bottom_plane ? FT_NOFILL : FT_UNFILL);
 
                 setEraseOperation(plane, ET_ERASE_FLUID);
 
                 // this plane cuts the lateral walls below the sloping ground
+		plane = addPlane(-sin(beta_2), 0, cos(beta_2),
+                        slope_origin_2.x*sin(beta_2)  + 2*(m_deltap + box_thickness*cos(beta_2)),
+                        FT_UNFILL);
                 //plane = addPlane(-sin(beta_2), 0, cos(beta_2),
                 //        slope_origin_2.x*sin(beta_2) - slope_length*sin(beta) + 2*(m_deltap + box_thickness*cos(beta_2)),
                 //        FT_UNFILL);
 
-                //setEraseOperation(plane, ET_ERASE_BOUNDARY);
+                setEraseOperation(plane, ET_ERASE_BOUNDARY);
 
                 // this plane corresponds to the initial paddle position, and is only used to cut out
                 // the fluid behind the paddle. it will not be an actual geometry
