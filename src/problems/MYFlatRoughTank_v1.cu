@@ -158,7 +158,7 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
 
 	// Drawing and saving times
 
-	add_writer(VTKWRITER, .05);  //second argument is saving time in seconds
+	add_writer(VTKWRITER, .25);  //second argument is saving time in seconds
 
 	// Name of problem used for directory creation
 	//m_name = "MYFlatRoughTank_v1";
@@ -247,7 +247,7 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
                 wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                 //        //Point(m_origin + make_double3(0, ly, -box_thickness)),
                         Point(make_double3(0,0,0) + make_double3(h_length+slope_length+slope2_length-m_deltap,0, -box_thickness)),
-        		box_thickness, ly,  lz);
+        		box_thickness, ly,  lz+box_thickness);
 		// left wall
 		//wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                 //        //Point(m_origin + make_double3(0, ly, -box_thickness)),
