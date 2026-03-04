@@ -117,7 +117,7 @@ MYWaveRoughTank_v1::MYWaveRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
 	//set_timestep(0.0001);
 	simparams()->dtadaptfactor = 0.2;
 	simparams()->buildneibsfreq = 10;
-	simparams()->tend = 30.0f; //seconds
+	simparams()->tend = 3.0f; //seconds
 	simparams()->densityDiffCoeff = 1.0;
 
 	//WaveGage
@@ -161,7 +161,7 @@ MYWaveRoughTank_v1::MYWaveRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
 
 	// Drawing and saving times
 
-	add_writer(VTKWRITER, .25);  //second argument is saving time in seconds
+	add_writer(VTKWRITER, .05);  //second argument is saving time in seconds
 
 	// Name of problem used for directory creation
 	//m_name = "MYWaveRoughTank_v1";
