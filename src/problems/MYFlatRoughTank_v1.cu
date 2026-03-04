@@ -145,7 +145,7 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
 	paddle_width = ly - 10*r0;
 	paddle_tstart=0.5f;
 	paddle_origin = make_double3(5*r0, 6*r0, 4*r0+1e-8);
-	paddle_tend = 3.0f;
+	paddle_tend = 30.0f;
 	// The stroke value is given at free surface level H
 	// float stroke = 0.2;
 	// m_mbamplitude is the maximal angular value for paddle angle
@@ -236,7 +236,7 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
                 GeometryID wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                 //        //Point(m_origin - make_double3(0, box_thickness, box_thickness)),
                         Point(make_double3(0,0,0) - make_double3(box_thickness+m_deltap, -m_deltap, -m_deltap)),
-                        lx + 2*box_thickness, box_thickness, lz-water_height);
+                        lx + 2*box_thickness, box_thickness, lz);
 
                 // far wall
                 wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
