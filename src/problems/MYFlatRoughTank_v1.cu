@@ -114,7 +114,7 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
 	//set_timestep(0.0001);
 	simparams()->dtadaptfactor = 0.2;
 	simparams()->buildneibsfreq = 10;
-	simparams()->tend = 30.0f; //seconds
+	simparams()->tend = 3.50f; //seconds
 	simparams()->densityDiffCoeff = 1.0;
 
 	//WaveGage
@@ -158,7 +158,7 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
 
 	// Drawing and saving times
 
-	add_writer(VTKWRITER, .25);  //second argument is saving time in seconds
+	add_writer(VTKWRITER, .05);  //second argument is saving time in seconds
 
 	// Name of problem used for directory creation
 	//m_name = "MYFlatRoughTank_v1";
@@ -274,7 +274,7 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
                 //if (z <= 0.6f) {
                 //     l = h_length + z/tan(beta) - 5*r0/sin(beta) - x;
                 //} else if (z <= 0.8f) {
-                     l = h_length + slope_length + z/tan(beta_2) - 10*r0/sin(beta_2) - x;
+                     l = h_length + slope_length + z/tan(beta_2) - 9*r0/sin(beta_2) - x;
                 //} else {
                 //     l = h_length-10;
                 //}
