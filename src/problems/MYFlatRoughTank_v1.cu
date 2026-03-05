@@ -279,7 +279,7 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
                 //     l = h_length-10;
                 //}
                 fluid = addRect(GT_FLUID, FT_SOLID, Point(x+9*r0,  9*r0, z),
-                                l, ly-16*r0);
+                                l, ly-17*r0);
                 n++;
          }
 	// these planes are used at least for cutting, so they are always defined
