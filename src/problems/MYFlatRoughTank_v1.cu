@@ -241,7 +241,7 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
                 // far wall
                 wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                 //        //Point(m_origin + make_double3(0, ly, -box_thickness)),
-                        Point(make_double3(0,0,0) + make_double3(0, ly-3*m_deltap-0.02, -m_deltap)),
+                        Point(make_double3(0,0,0) + make_double3(0, ly-6*m_deltap-0.02, -m_deltap)),
                         lx + 2*box_thickness, box_thickness, lz);
 		// end (right) wall
                 wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
@@ -263,7 +263,7 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
         float z = 0;
         int n = 0;
         while (z < H) {
-                z = n*(m_deltap+1e-6) + 5*r0;    //z = n*m_deltap + 1.5*r0;
+                z = n*(m_deltap+1e-6) + 8*r0;    //z = n*m_deltap + 1.5*r0;
                 //z = n*(m_deltap+1e-6) + water_height;
                 //float x = paddle_origin.x + (z - paddle_origin.z)*tan(amplitude) + 1.0*r0/cos(amplitude);
                 //float x = paddle_origin.x +r0;
@@ -278,7 +278,7 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
                 //} else {
                 //     l = h_length-10;
                 //}
-                fluid = addRect(GT_FLUID, FT_SOLID, Point(x+6*r0,  6*r0, z),
+                fluid = addRect(GT_FLUID, FT_SOLID, Point(x+9*r0,  7*r0, z),
                                 l, ly-11*r0);
                 n++;
          }
