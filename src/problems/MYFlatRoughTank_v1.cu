@@ -125,7 +125,7 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
 
 	// Physical parameters
 	H = 1.5;
-	float water_height = 0.8;
+	//float water_height = 0.8;
 	set_gravity(-9.81f);
 	//setMaxFall(H);
 	//setMaxParticleSpeed(7.0);
@@ -171,7 +171,7 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
 	//const float br = (simparams()->boundarytype == MK_BOUNDARY ? m_deltap/MK_par : r0);
 	//const int num_layers = (simparams()->boundarytype > SA_BOUNDARY) ?
         //        simparams()->get_influence_layers() : 1;
-	const int num_layers = 5;
+	const int num_layers = 8;
         const double box_thickness = (num_layers - 1)*m_deltap;
         const double3 slope_origin = make_double3(paddle_origin.x + h_length, 0, -box_thickness);
 	const double3 slope_origin_2 = make_double3(paddle_origin.x + h_length + slope_length, 0, slope_length*tan(beta)-box_thickness);
