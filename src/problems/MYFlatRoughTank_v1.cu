@@ -55,7 +55,7 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
 	// Size and origin of the simulation domain
 	lx = 86.5;
 	ly = 2.0;
-	lz = 4.5;
+	lz = 8.5;
 
 	// Data for problem setup
 	slope_length = 56.0;
@@ -124,7 +124,7 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
 	}
 
 	// Physical parameters
-	H = 1.5;
+	H = 5.0;
 	//float water_height = 0.8;
 	set_gravity(-9.81f);
 	//setMaxFall(H);
@@ -140,7 +140,7 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
 
 	//Wave paddle definition:  location, start & stop times, stroke and frequency (2 \pi/period)
 	//paddle_length = .7f;
-	paddle_length = 4.3f;
+	paddle_length = 7.f;
 	//paddle_width = m_size.y - 2*r0;
 	paddle_width = ly - 10*r0;
 	paddle_tstart=0.5f;
@@ -246,7 +246,7 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
 		// end (right) wall
                 wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                 //        //Point(m_origin + make_double3(0, ly, -box_thickness)),
-                        Point(make_double3(0,0,0) + make_double3(h_length+slope_length+slope2_length-m_deltap,0, -box_thickness)),
+                        Point(make_double3(0,0,0) + make_double3(h_length+slope_length+slope2_length-2*m_deltap,0, -box_thickness)),
         		box_thickness, ly,  lz+box_thickness);
 		// left wall
 		//wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
@@ -274,10 +274,13 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
                 //if (z <= 0.6f) {
                 //     l = h_length + z/tan(beta) - 5*r0/sin(beta) - x;
                 //} else if (z <= 0.8f) {
-                     l = h_length + slope_length + z/tan(beta_2) - 15*r0/sin(beta_2) - x;
+                     l = h_length + slope_length + z/tan(beta_2) - 10*r0/sin(beta_2) - x;
                 //} else {
                 //     l = h_length-10;
                 //}
+		if (l>=h_length+slope_length+slope2_length-3*m_deltap) {
+			l = h_length+slope_length+slope2_length-3*m_deltap;
+		}
                 fluid = addRect(GT_FLUID, FT_SOLID, Point(x+9*r0,  9*r0, z),
                                 l, ly-17*r0);
                 n++;
