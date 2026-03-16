@@ -246,7 +246,7 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
 		// end (right) wall
                 wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                 //        //Point(m_origin + make_double3(0, ly, -box_thickness)),
-                        Point(make_double3(0,0,0) + make_double3(h_length+slope_length+slope2_length-2*m_deltap,0, -box_thickness)),
+                        Point(make_double3(0,0,0) + make_double3(h_length+slope_length+slope2_length-m_deltap+1e-2,0, -box_thickness)),
         		box_thickness, ly,  lz+box_thickness);
 		// left wall
 		//wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
@@ -278,8 +278,8 @@ MYFlatRoughTank_v1::MYFlatRoughTank_v1(GlobalData *_gdata) : Problem(_gdata)
                 //} else {
                 //     l = h_length-10;
                 //}
-		if (l>=h_length+slope_length+slope2_length-3*m_deltap) {
-			l = h_length+slope_length+slope2_length-3*m_deltap;
+		if (l>=h_length+slope_length+slope2_length-12*m_deltap) {
+			l = h_length+slope_length+slope2_length-12*m_deltap;
 		}
                 fluid = addRect(GT_FLUID, FT_SOLID, Point(x+9*r0,  9*r0, z),
                                 l, ly-17*r0);
