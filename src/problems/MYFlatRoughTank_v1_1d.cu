@@ -274,16 +274,14 @@ MYFlatRoughTank_v1_1d::MYFlatRoughTank_v1_1d(GlobalData *_gdata) : Problem(_gdat
                 //if (z <= 0.6f) {
                 //     l = h_length + z/tan(beta) - 5*r0/sin(beta) - x;
                 //} else if (z <= 0.8f) {
-                     l = h_length + slope_length + z/tan(beta_2) - 15*r0/sin(beta_2) - x;
+                     l = h_length + slope_length + z/tan(beta_2) - 12*r0/sin(beta_2) - x;
                 //} else {
                 //     l = h_length-10;
                 //}
-                //fluid = addRect(GT_FLUID, FT_SOLID, Point(x+9*r0,  9*r0, z),
-                //                l, ly-17*r0);
+                fluid = addRect(GT_FLUID, FT_SOLID, Point(x+9*r0,  9*r0, z),
+                                l, ly-17*r0);
                 n++;
          }
-	float water_height = 1.5;
-        addDEMFluidBox(water_height);
 	// these planes are used at least for cutting, so they are always defined
         {
                 // sloping bottom as a plane. if use_bottom_plane, then it will be
@@ -307,10 +305,10 @@ MYFlatRoughTank_v1_1d::MYFlatRoughTank_v1_1d(GlobalData *_gdata) : Problem(_gdat
 
                 setEraseOperation(plane, ET_ERASE_FLUID);
 
-		plane = addPlane(0, 0, 1, -7*m_deltap,
-                        use_bottom_plane ? FT_NOFILL : FT_UNFILL);
+		//plane = addPlane(0, 0, 1, -7*m_deltap,
+                //        use_bottom_plane ? FT_NOFILL : FT_UNFILL);
 
-                setEraseOperation(plane, ET_ERASE_FLUID);
+                //setEraseOperation(plane, ET_ERASE_FLUID);
 
                 // this plane cuts the lateral walls below the sloping ground
 		plane = addPlane(-sin(beta_2), 0, cos(beta_2),
@@ -328,9 +326,9 @@ MYFlatRoughTank_v1_1d::MYFlatRoughTank_v1_1d(GlobalData *_gdata) : Problem(_gdat
                 const double pcz = sin(paddle_amplitude);
                 const double pcd = paddle_origin.x*pcx + paddle_origin.z*pcz;
                 //plane = addPlane(pcx, 0, pcz, -pcd, FT_UNFILL);
-		plane = addPlane(1, 0, 0, -8*m_deltap, FT_UNFILL);
+		//plane = addPlane(1, 0, 0, -8*m_deltap, FT_UNFILL);
 
-                setEraseOperation(plane, ET_ERASE_FLUID);
+                //setEraseOperation(plane, ET_ERASE_FLUID);
         }
 	//float water_height = 1.5;
 	//addDEMFluidBox(water_height);
