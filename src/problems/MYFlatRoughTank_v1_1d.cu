@@ -114,7 +114,7 @@ MYFlatRoughTank_v1_1d::MYFlatRoughTank_v1_1d(GlobalData *_gdata) : Problem(_gdat
 	//set_timestep(0.0001);
 	simparams()->dtadaptfactor = 0.2;
 	simparams()->buildneibsfreq = 10;
-	simparams()->tend = 30.0f; //seconds
+	simparams()->tend = 4.0f; //seconds
 	simparams()->densityDiffCoeff = 1.0;
 
 	//WaveGage
@@ -158,7 +158,7 @@ MYFlatRoughTank_v1_1d::MYFlatRoughTank_v1_1d(GlobalData *_gdata) : Problem(_gdat
 
 	// Drawing and saving times
 
-	add_writer(VTKWRITER, .25);  //second argument is saving time in seconds
+	add_writer(VTKWRITER, .05);  //second argument is saving time in seconds
 
 	// Name of problem used for directory creation
 	//m_name = "MYFlatRoughTank_v1_1d";
@@ -278,8 +278,8 @@ MYFlatRoughTank_v1_1d::MYFlatRoughTank_v1_1d(GlobalData *_gdata) : Problem(_gdat
                 //} else {
                 //     l = h_length-10;
                 //}
-                fluid = addRect(GT_FLUID, FT_SOLID, Point(x+9*r0,  9*r0, z),
-                                l, ly-17*r0);
+                //fluid = addRect(GT_FLUID, FT_SOLID, Point(x+9*r0,  9*r0, z),
+                //                l, ly-17*r0);
                 n++;
          }
 	// these planes are used at least for cutting, so they are always defined
@@ -324,8 +324,8 @@ MYFlatRoughTank_v1_1d::MYFlatRoughTank_v1_1d(GlobalData *_gdata) : Problem(_gdat
 
                 //setEraseOperation(plane, ET_ERASE_FLUID);
         }
-	//float water_height = 0.8;
-	//addDEMFluidBox(water_height);
+	float water_height = 1.5;
+	addDEMFluidBox(water_height);
 	//addExtraWorldMargin(5*m_deltap);
 	//GeometryID fluid;
 	//  moved upper sections
