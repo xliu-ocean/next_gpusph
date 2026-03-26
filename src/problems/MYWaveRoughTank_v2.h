@@ -37,7 +37,8 @@ class MYWaveRoughTank_v2: public Problem {
 		bool		use_cyl, use_bottom_plane;
 		double		paddle_length;
 		double		paddle_width;
-		double		h_length, height, slope_length, beta, slope2_length, beta_2;
+		double		h_length, height, slope_length, slope2_length, slope3_length;
+		double          beta, beta_1, beta_2;
 		double		H;		// still water level
 		double		lx, ly, lz;		// dimension of experiment box
 

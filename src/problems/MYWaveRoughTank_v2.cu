@@ -53,25 +53,24 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
 	//	throw std::invalid_argument("cannot use bottom plane if not using planes");
 
 	// Size and origin of the simulation domain
-	lx = 86.5;
+	lx = 115.;
 	ly = 2.0;
-	lz = 4.5;
+	lz = 8.5;
 
 	// Data for problem setup
 	slope_length = 56.0;
 	slope2_length = 15.0;
-	h_length = 15.5;
+	slope3_length = 36.0;
+	h_length = 5.0;
 	//height = .63;
 	height = 3.8;
 	//beta = 4.2364*M_PI/180.0;
 	//beta = 2.86241*M_PI/180.0;  // bed slope = atan(height/slope_length).
-	beta = 1.432*M_PI/180.0;
-        beta_2 = 11.30993*M_PI/180.0; //b1/eta for run-up slope
+	beta = 5.73917*M_PI/180.0;
+	beta_1 = 1.432*M_PI/180.0;
+        beta_2 = 11.536959*M_PI/180.0; //b1/eta for run-up slope
 
 	// add DEM
-	//const string dem_file = get_option("dem", "cobble_surface_with_slope_v3.txt");
-	//const string dem_file = get_option("dem", "cobble_surface_with_slope_v6_res001_2.0fac.txt");
-	//const string dem_file = get_option("dem", "cobble_surface_with_slope_v4_0.3fac.txt");
 	const string dem_file = get_option("dem", "preprocessing/cobble_slope_design/cobble_surface_with_slope_wave_v1_fac1.0.txt");
 
 
@@ -82,8 +81,8 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
 		boundary<DUMMY_BOUNDARY>
 	).select_options(
 		RHODIFF,use_geometries,
-		add_flags<ENABLE_DEM|ENABLE_PLANES>()
-//		add_flags<ENABLE_PLANES>()
+//		add_flags<ENABLE_DEM|ENABLE_PLANES>()
+		add_flags<ENABLE_PLANES>()
 		//add_flags<ENABLE_DEM | ENABLE_PLANES>
 	);
 
@@ -127,7 +126,7 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
 	}
 
 	// Physical parameters
-	H = 1.5;
+	H = 5.0;
 	float water_height = 0.8;
 	set_gravity(-9.81f);
 	//setMaxFall(H);
@@ -143,7 +142,7 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
 
 	//Wave paddle definition:  location, start & stop times, stroke and frequency (2 \pi/period)
 	//paddle_length = .7f;
-	paddle_length = 4.3f;
+	paddle_length = 8.0f;
 	//paddle_width = m_size.y - 2*r0;
 	paddle_width = ly - 10*r0;
 	paddle_tstart=0.5f;
@@ -168,7 +167,7 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
 
 	//GeometryID dem = addDEM(dem_file);
 	//addDEM(dem_file, DEM_FMT_ASCII, use_geometries ? FT_NOFILL : FT_BORDER);
-	addDEM(dem_file, DEM_FMT_ASCII, FT_BORDER);
+	//addDEM(dem_file, DEM_FMT_ASCII, FT_BORDER);
 
 	// Building the geometry
 	//const float br = (simparams()->boundarytype == MK_BOUNDARY ? m_deltap/MK_par : r0);
@@ -194,7 +193,8 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
 	//rotate(paddle, 0, 0, 0);
 	//disableCollisions(paddle);
 
-	double rot_correction1 = sin(beta)*box_thickness;
+	double rot_correction0 = sin(beta)*box_thickness;
+	double rot_correction1 = sin(beta_1)*box_thickness;
 	double rot_correction2 = sin(beta_2)*box_thickness;
 	//if (!use_bottom_plane) {
 		//GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
@@ -228,18 +228,30 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
                 addPlane(-1.0, 0, 0, l);  //one end
 	} else {
                 // flat bottom rectangle (before the slope begins)
-        //        GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-        //                Point(paddle_origin - make_double3(box_thickness, m_deltap, box_thickness)),
-        //                h_length + box_thickness + rot_correction1, ly, box_thickness);
-        //        setUnfillRadius(bottom, 0.5*m_deltap);
+                GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+                        Point(paddle_origin - make_double3(box_thickness, m_deltap, box_thickness)),
+                        h_length + box_thickness + rot_correction1, ly, box_thickness);
+                setUnfillRadius(bottom, 0.5*m_deltap);
 
+		bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+                        slope_origin + make_double3(rot_correction0, 0, (1-cos(beta))*box_thickness),
+                        (slope3_length - rot_correction0)/cos(beta), ly, box_thickness);
+                rotate(bottom, 0, beta, 0);
+		bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+                        slope_origin + make_double3(h_length+rot_correction1, 0, slope3_length*sin(beta)+(1-cos(beta))*box_thickness),
+                        (slope_length - rot_correction1)/cos(beta_1), ly, box_thickness);
+                rotate(bottom, 0, beta_1, 0);
+		bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+                        slope_origin + make_double3(h_length+slope3_length+rot_correction2, 0, slope3_length*sin(beta)+slope_length*sin(beta_1)+(1-cos(beta))*box_thickness),
+                        (slope_length - rot_correction2)/cos(beta_2), ly, box_thickness);
+                rotate(bottom, 0, beta_2, 0);
         //        const double wall_height = paddle_length + box_thickness + (lz - paddle_length)/3.0;
 	//	cout << "\nwall height: " << wall_height << "\n";
                 // close wall
                 GeometryID wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                 //        //Point(m_origin - make_double3(0, box_thickness, box_thickness)),
                         Point(make_double3(0,0,0) - make_double3(box_thickness+m_deltap, -m_deltap, -m_deltap)),
-                        lx + 2*box_thickness, box_thickness, lz-water_height);
+                        lx + 2*box_thickness, box_thickness, lz);
 
                 // far wall
                 wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
@@ -249,7 +261,7 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
 		// end (right) wall
                 wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                 //        //Point(m_origin + make_double3(0, ly, -box_thickness)),
-                        Point(make_double3(0,0,0) + make_double3(h_length+slope_length+slope2_length-m_deltap,0, -box_thickness)),
+                        Point(make_double3(0,0,0) + make_double3(h_length+slope_length+slope2_length+slope3_length-m_deltap,0, -box_thickness)),
         		box_thickness, ly,  lz);
 		// left wall
 		//wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
@@ -266,7 +278,7 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
         float z = 0;
         int n = 0;
         while (z < H) {
-                z = n*(m_deltap+1e-6) + 5*r0;    //z = n*m_deltap + 1.5*r0;
+                z = n*(m_deltap+1e-8) + 5*r0;    //z = n*m_deltap + 1.5*r0;
                 //z = n*(m_deltap+1e-6) + water_height;
                 //float x = paddle_origin.x + (z - paddle_origin.z)*tan(amplitude) + 1.0*r0/cos(amplitude);
                 //float x = paddle_origin.x +r0;
@@ -274,13 +286,13 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
                 //float l = h_length + z/tan(beta) - 1.5*r0/sin(beta) - x;
                 //float l = h_length;
                 float l;
-                //if (z <= 0.6f) {
-                     l = h_length + z/tan(beta) - 5*r0/sin(beta) - x;
-                //} else if (z <= 0.8f) {
-                //     l = h_length + 0.5f/tan(beta) + (z-0.5f)/tan(beta_2) - 1.5*r0/sin(beta_2) - x;
+                if (z <= 3.6f) {
+                     l = h_length + z/tan(beta) - 5.0*r0/sin(beta) - x;
+                } else if (z <= 5.0f) {
+                     l = h_length + 3.6f/tan(beta) + (z-3.6f)/tan(beta_1) - 5.0*r0/sin(beta_1) - x;
                 //} else {
                 //     l = h_length-10;
-                //}
+                }
                 fluid = addRect(GT_FLUID, FT_SOLID, Point(x+6*r0,  6*r0, z),
                                 l, ly-11*r0);
                 n++;
@@ -291,29 +303,29 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
                 // an actual geometry; if !use_bottom_plane, it will only be used
                 // to unfill the fluid (since the sloping box would not be sufficient
                 // to remove all of the fluid below)
-                GeometryID plane = addPlane(-sin(beta), 0, cos(beta), slope_origin.x*sin(beta),
-                        use_bottom_plane ? FT_NOFILL : FT_UNFILL);
+                //GeometryID plane = addPlane(-sin(beta), 0, cos(beta), slope_origin.x*sin(beta),
+                //        use_bottom_plane ? FT_NOFILL : FT_UNFILL);
 
-                setEraseOperation(plane, ET_ERASE_FLUID);
-
-                // this plane cuts the lateral walls below the sloping ground
-                plane = addPlane(-sin(beta), 0, cos(beta),
-                        slope_origin.x*sin(beta) + 2*(m_deltap + box_thickness*cos(beta)),
-                        FT_UNFILL);
-
-                setEraseOperation(plane, ET_ERASE_BOUNDARY);
-
-		plane = addPlane(-sin(beta_2), 0, cos(beta_2), slope_origin_2.x*sin(beta_2),
-                        use_bottom_plane ? FT_NOFILL : FT_UNFILL);
-
-                setEraseOperation(plane, ET_ERASE_FLUID);
+                //setEraseOperation(plane, ET_ERASE_FLUID);
 
                 // this plane cuts the lateral walls below the sloping ground
-                plane = addPlane(-sin(beta_2), 0, cos(beta_2),
-                        slope_origin_2.x*sin(beta_2) - slope_length*sin(beta) + 2*(m_deltap + box_thickness*cos(beta_2)),
-                        FT_UNFILL);
+                //plane = addPlane(-sin(beta), 0, cos(beta),
+                //        slope_origin.x*sin(beta) + 2*(m_deltap + box_thickness*cos(beta)),
+                //        FT_UNFILL);
 
-                setEraseOperation(plane, ET_ERASE_BOUNDARY);
+                //setEraseOperation(plane, ET_ERASE_BOUNDARY);
+
+		//plane = addPlane(-sin(beta_2), 0, cos(beta_2), slope_origin_2.x*sin(beta_2),
+                //        use_bottom_plane ? FT_NOFILL : FT_UNFILL);
+
+                //setEraseOperation(plane, ET_ERASE_FLUID);
+
+                // this plane cuts the lateral walls below the sloping ground
+                //plane = addPlane(-sin(beta_2), 0, cos(beta_2),
+                //        slope_origin_2.x*sin(beta_2) - slope_length*sin(beta) + 2*(m_deltap + box_thickness*cos(beta_2)),
+                //        FT_UNFILL);
+
+                //setEraseOperation(plane, ET_ERASE_BOUNDARY);
 
                 // this plane corresponds to the initial paddle position, and is only used to cut out
                 // the fluid behind the paddle. it will not be an actual geometry
