@@ -144,9 +144,9 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
 	//paddle_length = .7f;
 	paddle_length = 8.0f;
 	//paddle_width = m_size.y - 2*r0;
-	paddle_width = ly - 10*r0;
+	paddle_width = ly ;
 	paddle_tstart=0.5f;
-	paddle_origin = make_double3(5*r0, 6*r0, 4*r0);
+	paddle_origin = make_double3(5*r0, 0, r0);
 	paddle_tend = 30.0f;
 	// The stroke value is given at free surface level H
 	// float stroke = 0.2;
@@ -231,11 +231,11 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
                 // flat bottom rectangle (before the slope begins)
                 GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                         slope_origin_1 + make_double3(rot_correction0, 0, (1-cos(beta))*box_thickness),
-                        (slope3_length - rot_correction0)/cos(beta), ly, box_thickness);
+                        (slope3_length - rot_correction0 + rot_correction1)/cos(beta), ly, box_thickness);
                 rotate(bottom, 0, beta, 0);
 		
 		bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-                        Point(slope_origin - make_double3(box_thickness, m_deltap, 0)),
+                        Point(slope_origin - make_double3(box_thickness, 0, 0)),
                         h_length + box_thickness + rot_correction0, ly, box_thickness);
                 setUnfillRadius(bottom, 0.5*m_deltap);
 
@@ -252,13 +252,13 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
                 // close wall
                 GeometryID wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                 //        //Point(m_origin - make_double3(0, box_thickness, box_thickness)),
-                        Point(make_double3(0,0,0) - make_double3(box_thickness+m_deltap, box_thickness+m_deltap, -m_deltap)),
+                        Point(make_double3(0,0,0) - make_double3(box_thickness+m_deltap, box_thickness+m_deltap, num_layers*m_deltap)),
                         lx + 2*box_thickness, box_thickness, lz);
 
                 // far wall
                 wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                 //        //Point(m_origin + make_double3(0, ly, -box_thickness)),
-                        Point(make_double3(0,0,0) + make_double3(0, ly+m_deltap, -m_deltap)),
+                        Point(make_double3(0,0,0) + make_double3(0, ly+m_deltap, -num_layers*m_deltap)),
                         lx + 2*box_thickness, box_thickness, lz);
 		// end (right) wall
                 wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
@@ -277,10 +277,10 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
                         lx + 2*box_thickness, ly + 2*m_deltap, box_thickness);
         }
 	GeometryID fluid;
-        float z = 0;
+        double z = 0;
         int n = 0;
         while (z < H) {
-                z = n*(m_deltap+1e-7) + r0;    //z = n*m_deltap + 1.5*r0;
+                z = n*(m_deltap+1e-10) + r0;    //z = n*m_deltap + 1.5*r0;
                 //z = n*(m_deltap+1e-6) + water_height;
                 //float x = paddle_origin.x + (z - paddle_origin.z)*tan(amplitude) + 1.0*r0/cos(amplitude);
                 //float x = paddle_origin.x +r0;
@@ -288,15 +288,15 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
                 //float l = h_length + z/tan(beta) - 1.5*r0/sin(beta) - x;
                 //float l = h_length;
                 float l;
-                if (z <= 3.6f) {
-                     l = h_length + z/tan(beta) - 5.0*r0/sin(beta) - x;
+                if (z <= 3.6f+r0) {
+                     l = h_length + z/tan(beta) - r0/sin(beta) - x;
                 } else if (z <= 5.0f) {
-                     l = h_length + 3.6f/tan(beta) + (z-3.6f)/tan(beta_1) - 5.0*r0/sin(beta_1) - x;
+                     l = h_length + 3.6f/tan(beta) + (z-3.6f)/tan(beta_1) - r0/sin(beta_1) - x;
                 //} else {
                 //     l = h_length-10;
                 }
-                fluid = addRect(GT_FLUID, FT_SOLID, Point(x+6*r0,  6*r0, z),
-                                l, ly-11*r0);
+                fluid = addRect(GT_FLUID, FT_SOLID, Point(x+6*r0,  0, z),
+                                l, ly);
                 n++;
          }
 	// these planes are used at least for cutting, so they are always defined
