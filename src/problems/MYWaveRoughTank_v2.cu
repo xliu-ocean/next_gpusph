@@ -175,8 +175,9 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
         //        simparams()->get_influence_layers() : 1;
 	const int num_layers = 5;
         const double box_thickness = (num_layers - 1)*m_deltap;
-        const double3 slope_origin = make_double3(paddle_origin.x + h_length, 0, -box_thickness);
-	const double3 slope_origin_2 = make_double3(paddle_origin.x + h_length + slope_length, 0, slope_length*tan(beta)-box_thickness);
+	const double3 slope_origin = make_double3(paddle_origin.x, 0, -box_thickness);
+        const double3 slope_origin_1 = make_double3(paddle_origin.x + h_length, 0, -box_thickness);
+	const double3 slope_origin_2 = make_double3(paddle_origin.x + h_length + slope3_length, 0, slope3_length*tan(beta)-box_thickness);
         setDynamicBoundariesLayers(num_layers);
 
 	setPositioning(PP_CORNER);
@@ -229,34 +230,35 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
 	} else {
                 // flat bottom rectangle (before the slope begins)
                 GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-                        Point(paddle_origin - make_double3(box_thickness, m_deltap, box_thickness)),
-                        h_length + box_thickness + rot_correction1, ly, box_thickness);
+                        slope_origin_1 + make_double3(rot_correction0, 0, (1-cos(beta))*box_thickness),
+                        (slope3_length - rot_correction0)/cos(beta), ly, box_thickness);
+                rotate(bottom, 0, beta, 0);
+		
+		bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+                        Point(slope_origin - make_double3(box_thickness, m_deltap, 0)),
+                        h_length + box_thickness + rot_correction0, ly, box_thickness);
                 setUnfillRadius(bottom, 0.5*m_deltap);
 
 		bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-                        slope_origin + make_double3(rot_correction0, 0, (1-cos(beta))*box_thickness),
-                        (slope3_length - rot_correction0)/cos(beta), ly, box_thickness);
-                rotate(bottom, 0, beta, 0);
-		bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-                        slope_origin + make_double3(h_length+rot_correction1, 0, slope3_length*sin(beta)+(1-cos(beta))*box_thickness),
+                        slope_origin_2 + make_double3(rot_correction1, 0, (1-cos(beta))*box_thickness),
                         (slope_length - rot_correction1)/cos(beta_1), ly, box_thickness);
                 rotate(bottom, 0, beta_1, 0);
 		bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-                        slope_origin + make_double3(h_length+slope3_length+rot_correction2, 0, slope3_length*sin(beta)+slope_length*sin(beta_1)+(1-cos(beta))*box_thickness),
-                        (slope_length - rot_correction2)/cos(beta_2), ly, box_thickness);
+                        slope_origin_2 + make_double3(slope_length+rot_correction2, 0, slope_length*sin(beta_1)+(1-cos(beta))*box_thickness),
+                        (slope2_length - rot_correction2)/cos(beta_2), ly, box_thickness);
                 rotate(bottom, 0, beta_2, 0);
         //        const double wall_height = paddle_length + box_thickness + (lz - paddle_length)/3.0;
 	//	cout << "\nwall height: " << wall_height << "\n";
                 // close wall
                 GeometryID wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                 //        //Point(m_origin - make_double3(0, box_thickness, box_thickness)),
-                        Point(make_double3(0,0,0) - make_double3(box_thickness+m_deltap, -m_deltap, -m_deltap)),
+                        Point(make_double3(0,0,0) - make_double3(box_thickness+m_deltap, box_thickness+m_deltap, -m_deltap)),
                         lx + 2*box_thickness, box_thickness, lz);
 
                 // far wall
                 wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                 //        //Point(m_origin + make_double3(0, ly, -box_thickness)),
-                        Point(make_double3(0,0,0) + make_double3(0, ly-3*m_deltap-0.02, -m_deltap)),
+                        Point(make_double3(0,0,0) + make_double3(0, ly+m_deltap, -m_deltap)),
                         lx + 2*box_thickness, box_thickness, lz);
 		// end (right) wall
                 wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
@@ -278,7 +280,7 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
         float z = 0;
         int n = 0;
         while (z < H) {
-                z = n*(m_deltap+1e-8) + 5*r0;    //z = n*m_deltap + 1.5*r0;
+                z = n*(m_deltap+1e-7) + r0;    //z = n*m_deltap + 1.5*r0;
                 //z = n*(m_deltap+1e-6) + water_height;
                 //float x = paddle_origin.x + (z - paddle_origin.z)*tan(amplitude) + 1.0*r0/cos(amplitude);
                 //float x = paddle_origin.x +r0;
