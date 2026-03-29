@@ -228,17 +228,17 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
                 addPlane(1.0, 0, 0, 0);   //end
                 addPlane(-1.0, 0, 0, l);  //one end
 	} else {
-                // flat bottom rectangle (before the slope begins)
+                // slope - 1
                 GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                         slope_origin_1 + make_double3(rot_correction0, 0, (1-cos(beta))*box_thickness),
                         (slope3_length - rot_correction0 + rot_correction1)/cos(beta), ly, box_thickness);
                 rotate(bottom, 0, beta, 0);
-		
+		// flat bottom rectangle (before the slope begins)
 		bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                         Point(slope_origin - make_double3(box_thickness, 0, 0)),
                         h_length + box_thickness + rot_correction0, ly, box_thickness);
                 setUnfillRadius(bottom, 0.5*m_deltap);
-
+		// slope - 2
 		bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                         slope_origin_2 + make_double3(rot_correction1, 0, (1-cos(beta))*box_thickness),
                         (slope_length - rot_correction1)/cos(beta_1)+0.02, ly, box_thickness);
@@ -280,6 +280,7 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
 	GeometryID fluid;
         double z = 0;
         int n = 0;
+	double height_slope1 = 3.6f;
         while (z < H) {
                 z = n*(m_deltap+1e-10) + r0;    //z = n*m_deltap + 1.5*r0;
                 //z = n*(m_deltap+1e-6) + water_height;
@@ -289,7 +290,7 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
                 //float l = h_length + z/tan(beta) - 1.5*r0/sin(beta) - x;
                 //float l = h_length;
                 float l;
-                if (z <= 3.6f+r0) {
+                if (z <= height_slope1+r0) {
                      l = h_length + z/tan(beta) - r0/sin(beta) - x - 6.0*r0;
                 //} else if (z <= 5.0f+r0) {
                 //     l = h_length + 3.6f/tan(beta) - r0/sin(beta) + (z-3.6f)/tan(beta_1) - r0/sin(beta_1) - x - 6.0*r0;
@@ -299,8 +300,14 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
 		l = floor(l / r0) * r0;
                 fluid = addRect(GT_FLUID, FT_SOLID, Point(x+6*r0,  0, z),
                                 l, ly);
+
                 n++;
          }
+	double l2;
+	l2 = (slope_length - rot_correction1)/cos(beta_1) ;
+        fluid = addBox(GT_FLUID, FT_SOLID, Point(h_length + (height_slope1+r0)/tan(beta) - r0/sin(beta) - 5.0*r0,  0, height_slope1+r0),
+                         l2, ly, z-height_slope1-r0);
+        rotate(fluid, 0, beta_1, 0);
 	// these planes are used at least for cutting, so they are always defined
         {
                 // sloping bottom as a plane. if use_bottom_plane, then it will be
@@ -330,6 +337,10 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
                 //        FT_UNFILL);
 
                 //setEraseOperation(plane, ET_ERASE_BOUNDARY);
+		GeometryID plane = addPlane(-1.0, 0, 0, H,
+                        use_bottom_plane ? FT_NOFILL : FT_UNFILL);
+
+                setEraseOperation(plane, ET_ERASE_FLUID);
 
                 // this plane corresponds to the initial paddle position, and is only used to cut out
                 // the fluid behind the paddle. it will not be an actual geometry
