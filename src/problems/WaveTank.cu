@@ -45,7 +45,8 @@ WaveTank::WaveTank(GlobalData *_gdata) : Problem(_gdata)
 	// Add objects to the tank
 	const bool use_cyl = get_option("cylinder", false);
 	// Density diffusion type
-	const DensityDiffusionType RHODIFF = get_option("density-diffusion", COLAGROSSI);
+	//const DensityDiffusionType RHODIFF = get_option("density-diffusion", COLAGROSSI);
+	const DensityDiffusionType RHODIFF = get_option("density-diffusion", DELTA_SPH);
 	// Enable CCSPH?
 	const bool USE_CCSPH = get_option("use_ccsph", true);
 
@@ -139,7 +140,7 @@ WaveTank::WaveTank(GlobalData *_gdata) : Problem(_gdata)
 
 	// Drawing and saving times
 
-	add_writer(VTKWRITER, .1);  //second argument is saving time in seconds
+	add_writer(VTKWRITER, .05);  //second argument is saving time in seconds
 
 	/*
 	 * Building the geometry
@@ -279,6 +280,7 @@ WaveTank::moving_bodies_callback(const uint index, Object* object, const double 
     dx = make_double3(0.0);
     kdata.lvel = make_double3(0.0f, 0.0f, 0.0f);
     kdata.crot = make_double3(0.25f, m_deltap, 0.0f);
+    cout << "\nmove.lvel.x: " << t1 << "\n";
     if (t1> paddle_tstart && t1 < paddle_tend){
 	    kdata.avel = make_double3(0.0, paddle_amplitude*paddle_omega*sin(paddle_omega*(t1-paddle_tstart)),0.0);
 	    EulerParameters dqdt = 0.5*EulerParameters(kdata.avel)*kdata.orientation;
