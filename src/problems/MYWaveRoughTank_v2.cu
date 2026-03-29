@@ -54,7 +54,7 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
 
 	// Size and origin of the simulation domain
 	lx = 115.;
-	ly = 2.0;
+	ly = 2.1;
 	lz = 8.5;
 
 	// Data for problem setup
@@ -160,7 +160,7 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
 
 	// Drawing and saving times
 
-	add_writer(VTKWRITER, .25);  //second argument is saving time in seconds
+	add_writer(VTKWRITER, .05);  //second argument is saving time in seconds
 
 	// Name of problem used for directory creation
 	//m_name = "MYWaveRoughTank_v2";
@@ -241,8 +241,9 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
 
 		bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                         slope_origin_2 + make_double3(rot_correction1, 0, (1-cos(beta))*box_thickness),
-                        (slope_length - rot_correction1)/cos(beta_1), ly, box_thickness);
+                        (slope_length - rot_correction1)/cos(beta_1)+0.02, ly, box_thickness);
                 rotate(bottom, 0, beta_1, 0);
+		cout << "\nlength 1: " << (slope_length - rot_correction1)/cos(beta_1) << "\n";
 		bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                         slope_origin_2 + make_double3(slope_length+rot_correction2, 0, slope_length*sin(beta_1)+(1-cos(beta))*box_thickness),
                         (slope2_length - rot_correction2)/cos(beta_2), ly, box_thickness);
@@ -289,12 +290,13 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
                 //float l = h_length;
                 float l;
                 if (z <= 3.6f+r0) {
-                     l = h_length + z/tan(beta) - r0/sin(beta) - x;
-                } else if (z <= 5.0f) {
-                     l = h_length + 3.6f/tan(beta) + (z-3.6f)/tan(beta_1) - r0/sin(beta_1) - x;
+                     l = h_length + z/tan(beta) - r0/sin(beta) - x - 6.0*r0;
+                } else if (z <= 5.0f+r0) {
+                     l = h_length + 3.6f/tan(beta) - r0/sin(beta) + (z-3.6f)/tan(beta_1) - r0/sin(beta_1) - x - 6.0*r0;
                 //} else {
                 //     l = h_length-10;
                 }
+		l = floor(l / r0) * r0;
                 fluid = addRect(GT_FLUID, FT_SOLID, Point(x+6*r0,  0, z),
                                 l, ly);
                 n++;
@@ -413,7 +415,7 @@ MYWaveRoughTank_v2::moving_bodies_callback(const uint index, Object* object, con
 {
     dx= make_double3(0.0);
     kdata.lvel=make_double3(0.0f, 0.0f, 0.0f);
-    cout << "\nmove.lvel.x: " << t1 << "\n";
+    //cout << "\nmove.lvel.x: " << t1 << "\n";
     if (t1> paddle_tstart && t1 < paddle_tend){
        //kdata.avel = make_double3(0.0, paddle_amplitude*paddle_omega*sin(paddle_omega*(t1-paddle_tstart)),0.0);
 	//kdata.lvel = make_double3(paddle_amplitude*2.0*M_PI*sin(2.0*M_PI*(t1-paddle_tstart)/paddle_period),0,0);
