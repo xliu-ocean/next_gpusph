@@ -108,7 +108,7 @@ WaveTank::WaveTank(GlobalData *_gdata) : Problem(_gdata)
 	float r0 = m_deltap;
 
 	auto water = add_fluid( 1000.0f);
-	set_equation_of_state(water, 7.0f, NAN);
+	set_equation_of_state(water, 7.0f, 50.0f);
 	set_kinematic_visc(water, 1.0e-6);
 	set_artificial_visc(0.2f);
 
