@@ -291,8 +291,8 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
                 float l;
                 if (z <= 3.6f+r0) {
                      l = h_length + z/tan(beta) - r0/sin(beta) - x - 6.0*r0;
-                } else if (z <= 5.0f+r0) {
-                     l = h_length + 3.6f/tan(beta) - r0/sin(beta) + (z-3.6f)/tan(beta_1) - r0/sin(beta_1) - x - 6.0*r0;
+                //} else if (z <= 5.0f+r0) {
+                //     l = h_length + 3.6f/tan(beta) - r0/sin(beta) + (z-3.6f)/tan(beta_1) - r0/sin(beta_1) - x - 6.0*r0;
                 //} else {
                 //     l = h_length-10;
                 }
