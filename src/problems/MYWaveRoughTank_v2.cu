@@ -279,6 +279,7 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
         }
 	GeometryID fluid;
         double z = 0;
+	double l;
         int n = 0;
 	double height_slope1 = 3.6f;
         while (z < H) {
@@ -289,7 +290,7 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
                 float x = 0.0;
                 //float l = h_length + z/tan(beta) - 1.5*r0/sin(beta) - x;
                 //float l = h_length;
-                float l;
+                //float l;
                 if (z <= height_slope1+r0) {
                      l = h_length + z/tan(beta) - r0/sin(beta) - x - 6.0*r0;
                 //} else if (z <= 5.0f+r0) {
@@ -305,7 +306,7 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
          }
 	double l2;
 	l2 = (slope_length - rot_correction1)/cos(beta_1) ;
-        fluid = addBox(GT_FLUID, FT_SOLID, Point(h_length + (height_slope1+r0)/tan(beta) - r0/sin(beta) - 5.0*r0,  0, height_slope1+r0),
+        fluid = addBox(GT_FLUID, FT_SOLID, Point(l + r0,  0, height_slope1+r0),
                          l2, ly, z-height_slope1-r0);
         rotate(fluid, 0, beta_1, 0);
 	// these planes are used at least for cutting, so they are always defined
@@ -337,7 +338,7 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
                 //        FT_UNFILL);
 
                 //setEraseOperation(plane, ET_ERASE_BOUNDARY);
-		GeometryID plane = addPlane(-1.0, 0, 0, H,
+		GeometryID plane = addPlane(0, 0, -1.0, H+0.5*r0,
                         use_bottom_plane ? FT_NOFILL : FT_UNFILL);
 
                 setEraseOperation(plane, ET_ERASE_FLUID);
