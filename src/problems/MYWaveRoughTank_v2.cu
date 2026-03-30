@@ -160,7 +160,7 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
 
 	// Drawing and saving times
 
-	add_writer(VTKWRITER, .25);  //second argument is saving time in seconds
+	add_writer(VTKWRITER, .05);  //second argument is saving time in seconds
 
 	// Name of problem used for directory creation
 	//m_name = "MYWaveRoughTank_v2";
@@ -238,6 +238,10 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
                         Point(slope_origin - make_double3(box_thickness, 0, 0)),
                         h_length + box_thickness + rot_correction0, ly, box_thickness);
                 setUnfillRadius(bottom, 0.5*m_deltap);
+		bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+                        Point(slope_origin - make_double3(box_thickness+0.5*m_deltap, 0, 0)),
+                        h_length + box_thickness + rot_correction0, ly, box_thickness);
+                setUnfillRadius(bottom, 0.4*m_deltap);
 		// slope - 2
 		bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                         slope_origin_2 + make_double3(rot_correction1, 0, (1-cos(beta))*box_thickness),
