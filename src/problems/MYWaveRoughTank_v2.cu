@@ -160,7 +160,7 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
 
 	// Drawing and saving times
 
-	add_writer(VTKWRITER, .05);  //second argument is saving time in seconds
+	add_writer(VTKWRITER, .25);  //second argument is saving time in seconds
 
 	// Name of problem used for directory creation
 	//m_name = "MYWaveRoughTank_v2";
@@ -306,8 +306,9 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
          }
 	double l2;
 	l2 = (slope_length - rot_correction1)/cos(beta_1) ;
+	l2 = min(47.0,floor(l2 / r0) * r0);
         fluid = addBox(GT_FLUID, FT_SOLID, Point(l + r0,  0, height_slope1+r0),
-                         l2, ly, z-height_slope1-r0);
+                         l2, ly, z-height_slope1);
         rotate(fluid, 0, beta_1, 0);
 	// these planes are used at least for cutting, so they are always defined
         {
