@@ -113,7 +113,7 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
 
 	// SPH parameters
 	set_deltap(0.03f);  //0.005f;
-	//set_timestep(0.0001);
+	set_timestep(0.00001);
 	simparams()->dtadaptfactor = 0.2;
 	simparams()->buildneibsfreq = 10;
 	simparams()->tend = 30.0f; //seconds
