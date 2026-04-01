@@ -82,7 +82,8 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
 	).select_options(
 		RHODIFF,use_geometries,
 //		add_flags<ENABLE_DEM|ENABLE_PLANES>()
-		add_flags<ENABLE_PLANES>()
+		add_flags<ENABLE_PLANES>(), 
+		disable_flags<ENABLE_DTADAPT>
 		//add_flags<ENABLE_DEM | ENABLE_PLANES>
 	);
 
