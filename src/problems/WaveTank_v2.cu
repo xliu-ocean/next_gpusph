@@ -55,7 +55,7 @@ WaveTank_v2::WaveTank_v2(GlobalData *_gdata) : Problem(_gdata)
 
 	// Size and origin of the simulation domain
 	lx = 27.0;
-	ly = 0.6;
+	ly = 2.01;
 	lz = 1.0;
 
 	// Data for problem setup
