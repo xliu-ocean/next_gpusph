@@ -117,9 +117,9 @@ WaveTank_v2::WaveTank_v2(GlobalData *_gdata) : Problem(_gdata)
 	paddle_length = .7f;
 	//paddle_width = m_size.y - 2*r0;
 	paddle_width = 2.0-2*r0;
-	paddle_tstart = 0.5f;
+	paddle_tstart = 40.5f;
 	paddle_origin = make_double3(0.25f, r0, 0.0f);
-	paddle_tend = 30.0f;//seconds
+	paddle_tend = 50.0f;//seconds
 	// The stroke value is given at free surface level H
 	float stroke = 0.2;
 	float period = 0.8;
