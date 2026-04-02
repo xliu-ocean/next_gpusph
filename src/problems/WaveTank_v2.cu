@@ -116,7 +116,7 @@ WaveTank_v2::WaveTank_v2(GlobalData *_gdata) : Problem(_gdata)
 	//Wave paddle definition:  location, start & stop times, stroke and frequency (2 \pi/period)
 	paddle_length = .7f;
 	//paddle_width = m_size.y - 2*r0;
-	paddle_width = 0.6-2*r0;
+	paddle_width = 2.0-2*r0;
 	paddle_tstart = 0.5f;
 	paddle_origin = make_double3(0.25f, r0, 0.0f);
 	paddle_tend = 30.0f;//seconds
