@@ -90,7 +90,8 @@ WaveTank_v2::WaveTank_v2(GlobalData *_gdata) : Problem(_gdata)
 	}
 
 	// SPH parameters
-	set_deltap(1.0/64.0);
+	// set_deltap(1.0/64.0);
+	set_deltap(0.03);
 	simparams()->dtadaptfactor = 0.2;
 	simparams()->buildneibsfreq = 10;
 	simparams()->tend = 10.0f; //seconds
