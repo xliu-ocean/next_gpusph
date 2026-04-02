@@ -28,7 +28,7 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "WaveTank.h"
+#include "WaveTank_v2.h"
 #include "particledefine.h"
 #include "GlobalData.h"
 #include "cudasimframework.cu"
@@ -36,7 +36,7 @@
 
 #define MK_par 2
 
-WaveTank::WaveTank(GlobalData *_gdata) : Problem(_gdata)
+WaveTank_v2::WaveTank_v2(GlobalData *_gdata) : Problem(_gdata)
 {
 	// use planes in general
 	const bool use_planes = get_option("use_planes", false);
@@ -54,12 +54,12 @@ WaveTank::WaveTank(GlobalData *_gdata) : Problem(_gdata)
 		throw std::invalid_argument("cannot use bottom plane if not using planes");
 
 	// Size and origin of the simulation domain
-	lx = 9.0;
+	lx = 27.0;
 	ly = 0.6;
 	lz = 1.0;
 
 	// Data for problem setup
-	slope_length = 8.5;
+	slope_length = 25.2;
 	h_length = 0.5;
 	height = .63;
 	beta = atan(height/slope_length);
@@ -272,7 +272,7 @@ WaveTank::WaveTank(GlobalData *_gdata) : Problem(_gdata)
 
 
 void
-WaveTank::moving_bodies_callback(const uint index, Object* object, const double t0, const double t1,
+WaveTank_v2::moving_bodies_callback(const uint index, Object* object, const double t0, const double t1,
 			const float3& force, const float3& torque, const KinematicData& initial_kdata,
 			KinematicData& kdata, double3& dx, EulerParameters& dr)
 {
