@@ -53,17 +53,18 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
 	//	throw std::invalid_argument("cannot use bottom plane if not using planes");
 
 	// Size and origin of the simulation domain
-	lx = 115.;
+	lx = 27.;
 	ly = 2.1;
-	lz = 8.5;
+	lz = 1.0;
 
 	// Data for problem setup
-	slope_length = 56.0;
+	//slope_length = 56.0;
+	slope_length = 25.2;
 	slope2_length = 15.0;
 	slope3_length = 36.0;
-	h_length = 5.0;
-	//height = .63;
-	height = 3.8;
+	h_length = 0.5;
+	height = .63;
+	//height = 3.8;
 	//beta = 4.2364*M_PI/180.0;
 	//beta = 2.86241*M_PI/180.0;  // bed slope = atan(height/slope_length).
 	beta = 5.73917*M_PI/180.0;
@@ -113,8 +114,8 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
 
 	// SPH parameters
 	set_deltap(0.03f);  //0.005f;
-	set_timestep(0.00001);
-	simparams()->dtadaptfactor = 0.02;
+	//set_timestep(0.00001);
+	simparams()->dtadaptfactor = 0.2;
 	simparams()->buildneibsfreq = 10;
 	simparams()->tend = 30.0f; //seconds
 	simparams()->densityDiffCoeff = 1.0;
@@ -126,7 +127,8 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
 	}
 
 	// Physical parameters
-	H = 5.5;
+	//H = 5.5;
+	H = 0.45;
 	float water_height = 0.8;
 	set_gravity(-9.81f);
 	//setMaxFall(H);
@@ -145,9 +147,9 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
 	paddle_length = 8.0f;
 	//paddle_width = m_size.y - 2*r0;
 	paddle_width = ly ;
-	paddle_tstart=0.5f;
+	paddle_tstart=40.5f;
 	paddle_origin = make_double3(5*r0, 0, r0);
-	paddle_tend = 30.0f;
+	paddle_tend = 50.0f;
 	// The stroke value is given at free surface level H
 	// float stroke = 0.2;
 	// m_mbamplitude is the maximal angular value for paddle angle
@@ -186,6 +188,8 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
 	//Point(0, 0, 0), h_length + slope_length + slope2_length,ly, height);
 	//disableCollisions(experiment_box);
 
+        addBox(GT_FLUID, FT_SOLID, Point(0,0,0), lx, ly, H);
+
 	const float amplitude = -paddle_amplitude ;
 	GeometryID paddle = addBox(GT_MOVING_BODY, FT_BORDER,
 		Point(paddle_origin- make_double3(box_thickness, 0, 0)),
@@ -197,10 +201,15 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
 	double rot_correction0 = sin(beta)*box_thickness;
 	double rot_correction1 = sin(beta_1)*box_thickness;
 	double rot_correction2 = sin(beta_2)*box_thickness;
-	//if (!use_bottom_plane) {
-		//GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-		//		Point(h_length, 0, 0), 0, ly, paddle_length);
-		//	Vector(slope_length/cos(beta), 0.0, slope_length*tan(beta)));
+	if (!use_bottom_plane) {
+		GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+				slope_origin + make_double3(rot_correction, 0, (1-cos(beta))*box_thickness),
+				lx - h_length - rot_correction, ly, box_thickness);
+		rotate(bottom, 0, beta, 0);
+	}
+	//	GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+	//			Point(h_length, 0, 0), 0, ly, paddle_length);
+	//		Vector(slope_length/cos(beta), 0.0, slope_length*tan(beta)));
 	//	GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
         //                        slope_origin + make_double3(rot_correction1, 0, (1-cos(beta))*box_thickness),
         //                        (slope_length - rot_correction1)/cos(beta), ly, box_thickness);
@@ -229,24 +238,24 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
                 addPlane(-1.0, 0, 0, l);  //one end
 	} else {
 		// slope - 3
-		GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-                        slope_origin_2 + make_double3(slope_length+rot_correction2, 0, slope_length*sin(beta_1)+(1-cos(beta))*box_thickness),
-                        (slope2_length - rot_correction2)/cos(beta_2), ly, box_thickness);
-                rotate(bottom, 0, beta_2, 0);
+		//GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+                //        slope_origin_2 + make_double3(slope_length+rot_correction2, 0, slope_length*sin(beta_1)+(1-cos(beta))*box_thickness),
+                //        (slope2_length - rot_correction2)/cos(beta_2), ly, box_thickness);
+                //rotate(bottom, 0, beta_2, 0);
 		// slope - 2
-                bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-                        slope_origin_2 + make_double3(rot_correction1, 0, (1-cos(beta))*box_thickness),
-                        (slope_length - rot_correction1)/cos(beta_1)+0.02, ly, box_thickness);
-                rotate(bottom, 0, beta_1, 0);
-		setUnfillRadius(bottom, 0.5*m_deltap);
+                //bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+                //        slope_origin_2 + make_double3(rot_correction1, 0, (1-cos(beta))*box_thickness),
+                //        (slope_length - rot_correction1)/cos(beta_1)+0.02, ly, box_thickness);
+                //rotate(bottom, 0, beta_1, 0);
+		//setUnfillRadius(bottom, 0.5*m_deltap);
                 // slope - 1
-                bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-                        slope_origin_1 + make_double3(rot_correction0, 0, (1-cos(beta))*box_thickness),
-                        (slope3_length - rot_correction0 + rot_correction1)/cos(beta), ly, box_thickness);
-                rotate(bottom, 0, beta, 0);
-		setUnfillRadius(bottom, 0.5*m_deltap);
+                //bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+                //        slope_origin_1 + make_double3(rot_correction0, 0, (1-cos(beta))*box_thickness),
+                //       (slope3_length - rot_correction0 + rot_correction1)/cos(beta), ly, box_thickness);
+                //rotate(bottom, 0, beta, 0);
+		//setUnfillRadius(bottom, 0.5*m_deltap);
 		// flat bottom rectangle (before the slope begins)
-		bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+		GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                         Point(slope_origin - make_double3(box_thickness, 0, 0)),
                         h_length + box_thickness + rot_correction0, ly, box_thickness);
                 setUnfillRadius(bottom, 0.5*m_deltap);
@@ -285,10 +294,10 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
                 //        Point(make_double3(0,0,0) + make_double3(-box_thickness-m_deltap,0, water_height+m_deltap)),
                 //        box_thickness, ly,  lz-water_height);
 		//top cover
-		wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
+		//wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                         //Point(m_origin + make_double3(0, ly, -box_thickness)),
-                        Point(make_double3(0,0,0) + make_double3(-box_thickness, -m_deltap, lz)),
-                        lx + 2*box_thickness, ly + 2*m_deltap, box_thickness);
+                //        Point(make_double3(0,0,0) + make_double3(-box_thickness, -m_deltap, lz)),
+                //        lx + 2*box_thickness, ly + 2*m_deltap, box_thickness);
         }
 	GeometryID fluid;
         double z = 0;
