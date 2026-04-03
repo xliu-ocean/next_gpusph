@@ -48,6 +48,8 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
 	const DensityDiffusionType RHODIFF = get_option("density-diffusion", DELTA_SPH);
 
 	const bool use_geometries = get_option("use-geometries", true);
+	// Enable CCSPH?
+        const bool USE_CCSPH = get_option("use_ccsph", true);
 
 	//if (use_bottom_plane && !use_planes)
 	//	throw std::invalid_argument("cannot use bottom plane if not using planes");
@@ -82,7 +84,7 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
 		boundary<DUMMY_BOUNDARY>
 	).select_options(
 //		RHODIFF,use_geometries,
-		RHODIFF,
+		RHODIFF,USE_CCSPH,add_flags<ENABLE_CCSPH>(),
 //		add_flags<ENABLE_DEM|ENABLE_PLANES>()
 		use_planes, add_flags<ENABLE_PLANES>() 
 		//add_flags<ENABLE_DEM | ENABLE_PLANES>
@@ -161,6 +163,8 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
 	paddle_omega = 2.0*M_PI/10.0f;		// period T = 0.8 s
 	paddle_period = 10.0f;
 
+	setMaxParticleSpeed(1.0);
+
 	// Drawing and saving times
 
 	add_writer(VTKWRITER, .05);  //second argument is saving time in seconds
@@ -174,9 +178,9 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
 
 	// Building the geometry
 	//const float br = (simparams()->boundarytype == MK_BOUNDARY ? m_deltap/MK_par : r0);
-	//const int num_layers = (simparams()->boundarytype > SA_BOUNDARY) ?
-        //        simparams()->get_influence_layers() : 1;
-	const int num_layers = 5;
+	const int num_layers = (simparams()->boundarytype > SA_BOUNDARY) ?
+                simparams()->get_influence_layers() : 1;
+	//const int num_layers = 5;
         const double box_thickness = (num_layers - 1)*m_deltap;
 	const double3 slope_origin = make_double3(paddle_origin.x, 0, -box_thickness);
         const double3 slope_origin_1 = make_double3(paddle_origin.x + h_length, 0, -box_thickness);
