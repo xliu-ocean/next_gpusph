@@ -81,9 +81,10 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
 		viscosity<SPSVISC>,
 		boundary<DUMMY_BOUNDARY>
 	).select_options(
-		RHODIFF,use_geometries,
+//		RHODIFF,use_geometries,
+		RHODIFF,
 //		add_flags<ENABLE_DEM|ENABLE_PLANES>()
-		add_flags<ENABLE_PLANES>() 
+		use_planes, add_flags<ENABLE_PLANES>() 
 		//add_flags<ENABLE_DEM | ENABLE_PLANES>
 	);
 
@@ -203,7 +204,7 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
 	double rot_correction2 = sin(beta_2)*box_thickness;
 	if (!use_bottom_plane) {
 		GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-				slope_origin + make_double3(rot_correction1, 0, (1-cos(beta_1))*box_thickness),
+				slope_origin + make_double3(rot_correction1+h_length, 0, (1-cos(beta_1))*box_thickness),
 				lx - h_length - rot_correction1, ly, box_thickness);
 		rotate(bottom, 0, beta_1, 0);
 	}
@@ -256,7 +257,7 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
 		//setUnfillRadius(bottom, 0.5*m_deltap);
 		// flat bottom rectangle (before the slope begins)
 		GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-                        Point(slope_origin - make_double3(box_thickness, m_deltap, box_thickness)),
+                        Point(slope_origin - make_double3(box_thickness, m_deltap, 0)),
                         h_length + box_thickness + rot_correction1, ly, box_thickness);
                 setUnfillRadius(bottom, 0.5*m_deltap);
 		// slope - 2
@@ -270,7 +271,7 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
                 //        slope_origin_2 + make_double3(slope_length+rot_correction2, 0, slope_length*sin(beta_1)+(1-cos(beta))*box_thickness),
                 //        (slope2_length - rot_correction2)/cos(beta_2), ly, box_thickness);
                 //rotate(bottom, 0, beta_2, 0);
-        //        const double wall_height = paddle_length + box_thickness + (lz - paddle_length)/3.0;
+                const double wall_height = paddle_length + box_thickness + (lz - paddle_length)/3.0;
 	//	cout << "\nwall height: " << wall_height << "\n";
                 // close wall
                 GeometryID wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
@@ -281,13 +282,13 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
                 // far wall
                 wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                 //        //Point(m_origin + make_double3(0, ly, -box_thickness)),
-                        Point(make_double3(0,0,0) + make_double3(0, ly+m_deltap, -num_layers*m_deltap)),
-                        lx + 2*box_thickness, box_thickness, lz);
+                        Point(make_double3(0,0,0) + make_double3(0, ly, -num_layers*m_deltap)),
+                        lx + 2*box_thickness, box_thickness, wall_height);
 		// end (right) wall
                 wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                 //        //Point(m_origin + make_double3(0, ly, -box_thickness)),
                         Point(make_double3(0,0,0) + make_double3(h_length+slope_length+slope2_length+slope3_length-m_deltap,0, -box_thickness)),
-        		box_thickness, ly,  lz);
+        		box_thickness, ly,  wall_height);
 		// left wall
 		//wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                 //        //Point(m_origin + make_double3(0, ly, -box_thickness)),
@@ -339,7 +340,7 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
                 // an actual geometry; if !use_bottom_plane, it will only be used
                 // to unfill the fluid (since the sloping box would not be sufficient
                 // to remove all of the fluid below)
-                GeometryID plane = addPlane(-sin(beta_1), 0, cos(beta_1), slope_origin.x*sin(beta_1),
+                GeometryID plane = addPlane(-sin(beta_1), 0, cos(beta_1), (slope_origin.x+h_length)*sin(beta_1),
                         use_bottom_plane ? FT_NOFILL : FT_UNFILL);
 
                 setEraseOperation(plane, ET_ERASE_FLUID);
