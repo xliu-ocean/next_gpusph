@@ -49,7 +49,7 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
 
 	const bool use_geometries = get_option("use-geometries", true);
 	// Enable CCSPH?
-        const bool USE_CCSPH = get_option("use_ccsph", true);
+	const bool USE_CCSPH = get_option("use_ccsph", true);
 
 	//if (use_bottom_plane && !use_planes)
 	//	throw std::invalid_argument("cannot use bottom plane if not using planes");
@@ -78,16 +78,12 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
 
 
 	SETUP_FRAMEWORK(
-        //        rheology<NEWTONIAN>,
-        //        turbulence_model<ARTIFICIAL>,
 		viscosity<SPSVISC>,
 		boundary<DUMMY_BOUNDARY>
 	).select_options(
-//		RHODIFF,use_geometries,
-		RHODIFF,USE_CCSPH,add_flags<ENABLE_CCSPH>(),
-//		add_flags<ENABLE_DEM|ENABLE_PLANES>()
-		use_planes, add_flags<ENABLE_PLANES>() 
-		//add_flags<ENABLE_DEM | ENABLE_PLANES>
+		RHODIFF,
+		USE_CCSPH, add_flags<ENABLE_CCSPH>(),
+		use_planes, add_flags<ENABLE_PLANES>()
 	);
 
 	// Allow user to set the MLS frequency at runtime. Default to 0 if density
@@ -140,9 +136,8 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
 	float r0 = m_deltap;
 
 	auto water = add_fluid( 1000.0f);
-	//add_fluid( 1000.0f);
-	set_equation_of_state(0, 7.0f, 50.f);
-	set_kinematic_visc(0, 1.0e-6);
+	set_equation_of_state(water, 7.0f, 50.f);
+	set_kinematic_visc(water, 1.0e-6);
 	set_artificial_visc(0.2f);
 
 	//Wave paddle definition:  location, start & stop times, stroke and frequency (2 \pi/period)
@@ -162,6 +157,7 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
 	cout << "\npaddle_amplitude (radians): " << paddle_amplitude << "\n";
 	paddle_omega = 2.0*M_PI/10.0f;		// period T = 0.8 s
 	paddle_period = 10.0f;
+	setMaxFall(0.4725);
 
 	setMaxParticleSpeed(1.0);
 
