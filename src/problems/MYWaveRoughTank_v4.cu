@@ -69,7 +69,8 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
 	//height = 3.8;
 	//beta = 4.2364*M_PI/180.0;
 	//beta = 2.86241*M_PI/180.0;  // bed slope = atan(height/slope_length).
-	beta = 5.73917*M_PI/180.0;
+	beta = atan(height/slope_length);
+	//beta = 5.73917*M_PI/180.0;
 	beta_1 = 1.432*M_PI/180.0;
         beta_2 = 11.536959*M_PI/180.0; //b1/eta for run-up slope
 
@@ -144,9 +145,9 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
 	//paddle_length = .7f;
 	paddle_length = 8.0f;
 	//paddle_width = m_size.y - 2*r0;
-	paddle_width = ly ;
+	paddle_width = ly -2.0*r0;
 	paddle_tstart=40.5f;
-	paddle_origin = make_double3(5*r0, 0, r0);
+	paddle_origin = make_double3(0.25f, r0, 0.0f);
 	paddle_tend = 50.0f;
 	// The stroke value is given at free surface level H
 	// float stroke = 0.2;
@@ -175,10 +176,10 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
 	// Building the geometry
 	//const float br = (simparams()->boundarytype == MK_BOUNDARY ? m_deltap/MK_par : r0);
 	const int num_layers = (simparams()->boundarytype > SA_BOUNDARY) ?
-                simparams()->get_influence_layers() : 1;
+		simparams()->get_influence_layers() : 1;
 	//const int num_layers = 5;
-        const double box_thickness = (num_layers - 1)*m_deltap;
-	const double3 slope_origin = make_double3(paddle_origin.x, 0, -box_thickness);
+	const double box_thickness = (num_layers - 1)*m_deltap;
+	const double3 slope_origin = make_double3(paddle_origin.x + h_length, 0, -box_thickness);
         const double3 slope_origin_1 = make_double3(paddle_origin.x + h_length, 0, -box_thickness);
 	const double3 slope_origin_2 = make_double3(paddle_origin.x + h_length + slope3_length, 0, slope3_length*tan(beta)-box_thickness);
         setDynamicBoundariesLayers(num_layers);
@@ -199,14 +200,14 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
 	//rotate(paddle, 0, 0, 0);
 	//disableCollisions(paddle);
 
-	double rot_correction0 = sin(beta)*box_thickness;
+	double rot_correction = sin(beta)*box_thickness;
 	double rot_correction1 = sin(beta_1)*box_thickness;
 	double rot_correction2 = sin(beta_2)*box_thickness;
 	if (!use_bottom_plane) {
 		GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-				slope_origin + make_double3(rot_correction1+h_length, 0, (1-cos(beta_1))*box_thickness),
-				lx - h_length - rot_correction1, ly, box_thickness);
-		rotate(bottom, 0, beta_1, 0);
+				slope_origin + make_double3(rot_correction, 0, (1-cos(beta))*box_thickness),
+				lx - h_length - rot_correction, ly, box_thickness);
+		rotate(bottom, 0, beta, 0);
 	}
 	//	GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
 	//			Point(h_length, 0, 0), 0, ly, paddle_length);
@@ -257,9 +258,9 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
 		//setUnfillRadius(bottom, 0.5*m_deltap);
 		// flat bottom rectangle (before the slope begins)
 		GeometryID bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
-                        Point(slope_origin - make_double3(box_thickness, m_deltap, 0)),
-                        h_length + box_thickness + rot_correction1, ly, box_thickness);
-                setUnfillRadius(bottom, 0.5*m_deltap);
+			Point(paddle_origin - make_double3(box_thickness, m_deltap, box_thickness)),
+			h_length + box_thickness + rot_correction, ly, box_thickness);
+		setUnfillRadius(bottom, 0.5*m_deltap);
 		// slope - 2
 		//bottom = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                 //        slope_origin_2 + make_double3(rot_correction1, 0, (1-cos(beta))*box_thickness),
@@ -273,11 +274,10 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
                 //rotate(bottom, 0, beta_2, 0);
                 const double wall_height = paddle_length + box_thickness + (lz - paddle_length)/3.0;
 	//	cout << "\nwall height: " << wall_height << "\n";
-                // close wall
                 GeometryID wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                 //        //Point(m_origin - make_double3(0, box_thickness, box_thickness)),
                         Point(make_double3(0,0,0) - make_double3(box_thickness+m_deltap, box_thickness+m_deltap, num_layers*m_deltap)),
-                        lx + 2*box_thickness, box_thickness, lz);
+                        lx + 2*box_thickness, box_thickness, wall_height);
 
                 // far wall
                 wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
@@ -340,14 +340,14 @@ MYWaveRoughTank_v4::MYWaveRoughTank_v4(GlobalData *_gdata) : Problem(_gdata)
                 // an actual geometry; if !use_bottom_plane, it will only be used
                 // to unfill the fluid (since the sloping box would not be sufficient
                 // to remove all of the fluid below)
-                GeometryID plane = addPlane(-sin(beta_1), 0, cos(beta_1), (slope_origin.x+h_length)*sin(beta_1),
+                GeometryID plane = addPlane(-sin(beta), 0, cos(beta), slope_origin.x*sin(beta),
                         use_bottom_plane ? FT_NOFILL : FT_UNFILL);
 
                 setEraseOperation(plane, ET_ERASE_FLUID);
 
                 // this plane cuts the lateral walls below the sloping ground
-                plane = addPlane(-sin(beta_1), 0, cos(beta_1),
-                        slope_origin.x*sin(beta_1) + 2*(m_deltap + box_thickness*cos(beta_1)),
+                plane = addPlane(-sin(beta), 0, cos(beta),
+                        slope_origin.x*sin(beta) + 2*(m_deltap + box_thickness*cos(beta)),
                         FT_UNFILL);
 
                 setEraseOperation(plane, ET_ERASE_BOUNDARY);
