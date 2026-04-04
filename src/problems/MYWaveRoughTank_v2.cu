@@ -82,8 +82,7 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
 	).select_options(
 		RHODIFF,use_geometries,
 //		add_flags<ENABLE_DEM|ENABLE_PLANES>()
-		add_flags<ENABLE_PLANES>(), 
-		disable_flags<ENABLE_DTADAPT>
+		add_flags<ENABLE_PLANES>() 
 		//add_flags<ENABLE_DEM | ENABLE_PLANES>
 	);
 
@@ -115,10 +114,10 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
 	// SPH parameters
 	set_deltap(0.03f);  //0.005f;
 	set_timestep(0.00001);
-	//simparams()->dtadaptfactor = 0.2;
+	simparams()->dtadaptfactor = 0.02;
 	simparams()->buildneibsfreq = 10;
 	simparams()->tend = 30.0f; //seconds
-	simparams()->densityDiffCoeff = 1.0;
+	//simparams()->densityDiffCoeff = 1.0;
 
 	//WaveGage
 	if (get_option("gages", false)) {
@@ -307,24 +306,23 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
                 //float l;
                 if (z <= height_slope1+r0) {
                      l = h_length + z/tan(beta) - r0/sin(beta) - x - 6.0*r0;
-                //} else if (z <= 5.0f+r0) {
-                //     l = h_length + 3.6f/tan(beta) - r0/sin(beta) + (z-3.6f)/tan(beta_1) - r0/sin(beta_1) - x - 6.0*r0;
+                } else if (z <= H+r0) {
+                     l = h_length + 3.6f/tan(beta) - r0/sin(beta) + (z-3.6f)/tan(beta_1) - r0/sin(beta_1) - x - 6.0*r0;
                 //} else {
                 //     l = h_length-10;
                 }
-		l = floor(l / r0) * r0;
                 fluid = addRect(GT_FLUID, FT_SOLID, Point(x+6*r0,  0, z),
                                 l, ly);
 
                 n++;
          }
-	double l2;
-	l2 = (slope_length - rot_correction1)/cos(beta_1) ;
+	//double l2;
+	//l2 = (slope_length - rot_correction1)/cos(beta_1) ;
 	//l2 = min(47.0,floor(l2 / r0) * r0);
-	l2 = floor(l2 / r0) * r0;
-        fluid = addBox(GT_FLUID, FT_SOLID, Point(l + r0,  0, height_slope1+r0),
-                         l2, ly, z-height_slope1);
-        rotate(fluid, 0, beta_1, 0);
+	//l2 = floor(l2 / r0) * r0;
+        //fluid = addBox(GT_FLUID, FT_SOLID, Point(l + r0,  0, height_slope1+r0),
+        //                 l2, ly, z-height_slope1);
+        //rotate(fluid, 0, beta_1, 0);
 	// these planes are used at least for cutting, so they are always defined
         {
                 // sloping bottom as a plane. if use_bottom_plane, then it will be
@@ -354,10 +352,10 @@ MYWaveRoughTank_v2::MYWaveRoughTank_v2(GlobalData *_gdata) : Problem(_gdata)
                 //        FT_UNFILL);
 
                 //setEraseOperation(plane, ET_ERASE_BOUNDARY);
-		GeometryID plane = addPlane(0, 0, -1.0, 4.25+0.5*r0,
-                        use_bottom_plane ? FT_NOFILL : FT_UNFILL);
+		//GeometryID plane = addPlane(0, 0, -1.0, 4.25+0.5*r0,
+                //        use_bottom_plane ? FT_NOFILL : FT_UNFILL);
 
-                setEraseOperation(plane, ET_ERASE_FLUID);
+                //setEraseOperation(plane, ET_ERASE_FLUID);
 
                 // this plane corresponds to the initial paddle position, and is only used to cut out
                 // the fluid behind the paddle. it will not be an actual geometry
@@ -481,7 +479,7 @@ MYWaveRoughTank_v2::moving_bodies_callback(const uint index, Object* object, con
 	//   kdata.orientation = kdata.orientation + (t1 - t0)*dqdt;
 	//   kdata.orientation.Normalize();
 	dx.x = (t1 - t0) * kdata.lvel.x;
-	cout << "\nkdata.lvel.x: " << kdata.lvel.x << "\n";
+	//cout << "\nkdata.lvel.x: " << kdata.lvel.x << "\n";
     }
     else {
 	   //kdata.avel = make_double3(0.0,0.0,0.0);
