@@ -53,13 +53,13 @@ MYWaveRoughTank_v5::MYWaveRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	//	throw std::invalid_argument("cannot use bottom plane if not using planes");
 
 	// Size and origin of the simulation domain
-	lx = 86.5;
+	lx = 91.6;
 	ly = 2.0;
-	lz = 4.5;
+	lz = 5.65;
 
 	// Data for problem setup
 	slope_length = 56.0;
-	slope2_length = 15.0;
+	slope2_length = 20.0;
 	h_length = 15.5;
 	//height = .63;
 	height = 3.8;
@@ -69,10 +69,7 @@ MYWaveRoughTank_v5::MYWaveRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
         beta_2 = 11.30993*M_PI/180.0; //b1/eta for run-up slope
 
 	// add DEM
-	//const string dem_file = get_option("dem", "cobble_surface_with_slope_v3.txt");
-	//const string dem_file = get_option("dem", "cobble_surface_with_slope_v6_res001_2.0fac.txt");
-	//const string dem_file = get_option("dem", "cobble_surface_with_slope_v4_0.3fac.txt");
-	const string dem_file = get_option("dem", "preprocessing/cobble_slope_design/cobble_surface_with_slope_wave_v1_fac1.0.txt");
+	const string dem_file = get_option("dem", "preprocessing/cobble_slope_design/cobble_surface_with_slope_wave_v10_fac1.0.txt");
 
 
 	SETUP_FRAMEWORK(
@@ -118,7 +115,7 @@ MYWaveRoughTank_v5::MYWaveRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	simparams()->dtadaptfactor = 0.2;
 	simparams()->buildneibsfreq = 10;
 	simparams()->tend = 30.0f; //seconds
-	simparams()->densityDiffCoeff = 1.0;
+	//simparams()->densityDiffCoeff = 1.0;
 
 	//WaveGage
 	if (get_option("gages", false)) {
@@ -128,7 +125,7 @@ MYWaveRoughTank_v5::MYWaveRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 
 	// Physical parameters
 	H = 1.5;
-	float water_height = 0.8;
+	//float water_height = 0.8;
 	set_gravity(-9.81f);
 	//setMaxFall(H);
 	//setMaxParticleSpeed(7.0);
@@ -146,9 +143,9 @@ MYWaveRoughTank_v5::MYWaveRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	paddle_length = 4.3f;
 	//paddle_width = m_size.y - 2*r0;
 	paddle_width = ly - 10*r0;
-	paddle_tstart=0.5f;
+	paddle_tstart=0.25f;
 	paddle_origin = make_double3(5*r0, 6*r0, 4*r0);
-	paddle_tend = 30.0f;
+	paddle_tend = 10.0f;
 	// The stroke value is given at free surface level H
 	// float stroke = 0.2;
 	// m_mbamplitude is the maximal angular value for paddle angle
@@ -235,11 +232,12 @@ MYWaveRoughTank_v5::MYWaveRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 
         //        const double wall_height = paddle_length + box_thickness + (lz - paddle_length)/3.0;
 	//	cout << "\nwall height: " << wall_height << "\n";
+		cout << "\nDEM input: " << dem_file << "\n";
                 // close wall
                 GeometryID wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
                 //        //Point(m_origin - make_double3(0, box_thickness, box_thickness)),
                         Point(make_double3(0,0,0) - make_double3(box_thickness+m_deltap, -m_deltap, -m_deltap)),
-                        lx + 2*box_thickness, box_thickness, lz-water_height);
+                        lx + 2*box_thickness, box_thickness, lz);
 
                 // far wall
                 wall = addBox(GT_FIXED_BOUNDARY, FT_BORDER,
@@ -399,7 +397,7 @@ MYWaveRoughTank_v5::moving_bodies_callback(const uint index, Object* object, con
 {
     dx= make_double3(0.0);
     kdata.lvel=make_double3(0.0f, 0.0f, 0.0f);
-    cout << "\nmove.lvel.x: " << t1 << "\n";
+    //cout << "\nmove.lvel.x: " << t1 << "\n";
     if (t1> paddle_tstart && t1 < paddle_tend){
        //kdata.avel = make_double3(0.0, paddle_amplitude*paddle_omega*sin(paddle_omega*(t1-paddle_tstart)),0.0);
 	//kdata.lvel = make_double3(paddle_amplitude*2.0*M_PI*sin(2.0*M_PI*(t1-paddle_tstart)/paddle_period),0,0);
@@ -437,7 +435,7 @@ MYWaveRoughTank_v5::moving_bodies_callback(const uint index, Object* object, con
 	//   kdata.orientation = kdata.orientation + (t1 - t0)*dqdt;
 	//   kdata.orientation.Normalize();
 	dx.x = (t1 - t0) * kdata.lvel.x;
-	cout << "\nkdata.lvel.x: " << kdata.lvel.x << "\n";
+	//cout << "\nkdata.lvel.x: " << kdata.lvel.x << "\n";
     }
     else {
 	   //kdata.avel = make_double3(0.0,0.0,0.0);
