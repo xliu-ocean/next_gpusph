@@ -124,7 +124,8 @@ MYWaveRoughTank_v5::MYWaveRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	}
 
 	// Physical parameters
-	H = 1.5;
+	const float water_height = get_option("water_elevation", 1.5);
+	H = water_height;
 	//float water_height = 0.8;
 	set_gravity(-9.81f);
 	//setMaxFall(H);
@@ -151,8 +152,8 @@ MYWaveRoughTank_v5::MYWaveRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	// m_mbamplitude is the maximal angular value for paddle angle
 	// Paddle angle is in [-m_mbamplitude, m_mbamplitude]
 	//paddle_amplitude = atan(stroke/(2.0*(H - paddle_origin.z)));
-	paddle_amplitude = 2;
-	cout << "\npaddle_amplitude (radians): " << paddle_amplitude << "\n";
+	const float paddle_amplitude = get_option("paddle_amp", 2.0);
+	cout << "\npaddle_amplitude (meters): " << paddle_amplitude << "\n";
 	paddle_omega = 2.0*M_PI/10.0f;		// period T = 0.8 s
 	paddle_period = 10.0f;
 
