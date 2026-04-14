@@ -70,7 +70,7 @@ MYWaveRoughTank_v5::MYWaveRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 
 	// add DEM
 	const string dem_file = get_option("dem", "preprocessing/cobble_slope_design/cobble_surface_with_slope_wave_v10_fac1.0.txt");
-
+	cout << "\nDEM file: " << dem_file << "\n";
 
 	SETUP_FRAMEWORK(
         //        rheology<NEWTONIAN>,
@@ -126,6 +126,7 @@ MYWaveRoughTank_v5::MYWaveRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
 	// Physical parameters
 	const float water_height = get_option("water_elevation", 1.5);
 	H = water_height;
+	cout << "\nwave elevation H (meters): " << H << "\n";
 	//float water_height = 0.8;
 	set_gravity(-9.81f);
 	//setMaxFall(H);
@@ -273,13 +274,13 @@ MYWaveRoughTank_v5::MYWaveRoughTank_v5(GlobalData *_gdata) : Problem(_gdata)
                 //float l = h_length + z/tan(beta) - 1.5*r0/sin(beta) - x;
                 //float l = h_length;
                 float l;
-                //if (z <= 0.6f) {
+                if (z <= 1.5f + 2*r0) {
                      l = h_length + z/tan(beta) - 5*r0/sin(beta) - x;
                 //} else if (z <= 0.8f) {
                 //     l = h_length + 0.5f/tan(beta) + (z-0.5f)/tan(beta_2) - 1.5*r0/sin(beta_2) - x;
-                //} else {
-                //     l = h_length-10;
-                //}
+                } else {
+                     l = h_length + slope_length + (z -1.5)/tan(beta_2) - 5*r0/sin(beta_2) - 3.0*r0 - x;
+                }
                 fluid = addRect(GT_FLUID, FT_SOLID, Point(x+6*r0,  6*r0, z),
                                 l, ly-11*r0);
                 n++;
