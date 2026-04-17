@@ -66,7 +66,7 @@ MYWaveRoughTank_v5_slope2::MYWaveRoughTank_v5_slope2(GlobalData *_gdata) : Probl
 	//beta = 4.2364*M_PI/180.0;
 	//beta = 2.86241*M_PI/180.0;  // bed slope = atan(height/slope_length).
 	beta = 1.432*M_PI/180.0;
-        beta_2 = 11.30993*M_PI/180.0; //b1/eta for run-up slope
+        beta_2 = 9.46232*M_PI/180.0; //b1/eta for run-up slope
 
 	// add DEM
 	const string dem_file = get_option("dem", "preprocessing/cobble_slope_design/cobble_surface_with_slope_wave_v10_fac1.0.txt");
